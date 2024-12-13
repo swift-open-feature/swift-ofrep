@@ -19,7 +19,7 @@ let package = Package(
         .target(
             name: "OFREP",
             dependencies: [
-                .product(name: "OpenFeature", package: "swift-open-feature"),
+                .product(name: "OpenFeature", package: "swift-open-feature")
             ]
         ),
         .testTarget(
