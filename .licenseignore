@@ -7,3 +7,5 @@
 *.txt
 *.yaml
 Package.swift
+.gitmodules
+protocol/
