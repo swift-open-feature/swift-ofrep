@@ -40,3 +40,15 @@ jobs:
           SWIFTLY_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Run format check
         run: ./scripts/check-swift-format.sh
+
+  broken-symlinks-check:
+    name: Broken symlinks check
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: Run broken symlinks check
+        run: ./scripts/check-broken-symlinks.sh
