@@ -1,6 +1,7 @@
 .gitignore
 .licenseignore
 .unacceptablelanguageignore
+.swiftformatignore
 .swift-format
 .editorconfig
 *.md
@@ -9,3 +10,5 @@
 Package.swift
 .gitmodules
 protocol/
+Makefile
+*/Generated/**
