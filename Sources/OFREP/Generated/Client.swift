@@ -46,10 +46,10 @@ internal struct Client: APIProtocol {
     ///
     /// - Remark: HTTP `POST /ofrep/v1/evaluate/flags/{key}`.
     /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/{key}/post`.
-    internal func post_sol_ofrep_sol_v1_sol_evaluate_sol_flags_sol__lcub_key_rcub_(_ input: Operations.post_sol_ofrep_sol_v1_sol_evaluate_sol_flags_sol__lcub_key_rcub_.Input) async throws -> Operations.post_sol_ofrep_sol_v1_sol_evaluate_sol_flags_sol__lcub_key_rcub_.Output {
+    internal func postOfrepV1EvaluateFlagsKey(_ input: Operations.PostOfrepV1EvaluateFlagsKey.Input) async throws -> Operations.PostOfrepV1EvaluateFlagsKey.Output {
         try await client.send(
             input: input,
-            forOperation: Operations.post_sol_ofrep_sol_v1_sol_evaluate_sol_flags_sol__lcub_key_rcub_.id,
+            forOperation: Operations.PostOfrepV1EvaluateFlagsKey.id,
             serializer: { input in
                 let path = try converter.renderedPath(
                     template: "/ofrep/v1/evaluate/flags/{}",
@@ -83,7 +83,7 @@ internal struct Client: APIProtocol {
                 switch response.status.code {
                 case 200:
                     let contentType = converter.extractContentTypeIfPresent(in: response.headerFields)
-                    let body: Operations.post_sol_ofrep_sol_v1_sol_evaluate_sol_flags_sol__lcub_key_rcub_.Output.Ok.Body
+                    let body: Operations.PostOfrepV1EvaluateFlagsKey.Output.Ok.Body
                     let chosenContentType = try converter.bestContentType(
                         received: contentType,
                         options: [
@@ -93,7 +93,7 @@ internal struct Client: APIProtocol {
                     switch chosenContentType {
                     case "application/json":
                         body = try await converter.getResponseBodyAsJSON(
-                            Components.Schemas.evaluationSuccess.self,
+                            Components.Schemas.EvaluationSuccess.self,
                             from: responseBody,
                             transforming: { value in
                                 .json(value)
@@ -105,7 +105,7 @@ internal struct Client: APIProtocol {
                     return .ok(.init(body: body))
                 case 400:
                     let contentType = converter.extractContentTypeIfPresent(in: response.headerFields)
-                    let body: Operations.post_sol_ofrep_sol_v1_sol_evaluate_sol_flags_sol__lcub_key_rcub_.Output.BadRequest.Body
+                    let body: Operations.PostOfrepV1EvaluateFlagsKey.Output.BadRequest.Body
                     let chosenContentType = try converter.bestContentType(
                         received: contentType,
                         options: [
@@ -115,7 +115,7 @@ internal struct Client: APIProtocol {
                     switch chosenContentType {
                     case "application/json":
                         body = try await converter.getResponseBodyAsJSON(
-                            Components.Schemas.evaluationFailure.self,
+                            Components.Schemas.EvaluationFailure.self,
                             from: responseBody,
                             transforming: { value in
                                 .json(value)
@@ -127,7 +127,7 @@ internal struct Client: APIProtocol {
                     return .badRequest(.init(body: body))
                 case 404:
                     let contentType = converter.extractContentTypeIfPresent(in: response.headerFields)
-                    let body: Operations.post_sol_ofrep_sol_v1_sol_evaluate_sol_flags_sol__lcub_key_rcub_.Output.NotFound.Body
+                    let body: Operations.PostOfrepV1EvaluateFlagsKey.Output.NotFound.Body
                     let chosenContentType = try converter.bestContentType(
                         received: contentType,
                         options: [
@@ -137,7 +137,7 @@ internal struct Client: APIProtocol {
                     switch chosenContentType {
                     case "application/json":
                         body = try await converter.getResponseBodyAsJSON(
-                            Components.Schemas.flagNotFound.self,
+                            Components.Schemas.FlagNotFound.self,
                             from: responseBody,
                             transforming: { value in
                                 .json(value)
@@ -152,7 +152,7 @@ internal struct Client: APIProtocol {
                 case 403:
                     return .forbidden(.init())
                 case 429:
-                    let headers: Operations.post_sol_ofrep_sol_v1_sol_evaluate_sol_flags_sol__lcub_key_rcub_.Output.TooManyRequests.Headers = .init(Retry_hyphen_After: try converter.getOptionalHeaderFieldAsURI(
+                    let headers: Operations.PostOfrepV1EvaluateFlagsKey.Output.TooManyRequests.Headers = .init(retryAfter: try converter.getOptionalHeaderFieldAsURI(
                         in: response.headerFields,
                         name: "Retry-After",
                         as: Foundation.Date.self
@@ -160,7 +160,7 @@ internal struct Client: APIProtocol {
                     return .tooManyRequests(.init(headers: headers))
                 case 500:
                     let contentType = converter.extractContentTypeIfPresent(in: response.headerFields)
-                    let body: Operations.post_sol_ofrep_sol_v1_sol_evaluate_sol_flags_sol__lcub_key_rcub_.Output.InternalServerError.Body
+                    let body: Operations.PostOfrepV1EvaluateFlagsKey.Output.InternalServerError.Body
                     let chosenContentType = try converter.bestContentType(
                         received: contentType,
                         options: [
@@ -170,7 +170,7 @@ internal struct Client: APIProtocol {
                     switch chosenContentType {
                     case "application/json":
                         body = try await converter.getResponseBodyAsJSON(
-                            Components.Schemas.generalErrorResponse.self,
+                            Components.Schemas.GeneralErrorResponse.self,
                             from: responseBody,
                             transforming: { value in
                                 .json(value)
@@ -200,10 +200,10 @@ internal struct Client: APIProtocol {
     ///
     /// - Remark: HTTP `POST /ofrep/v1/evaluate/flags`.
     /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/post`.
-    internal func post_sol_ofrep_sol_v1_sol_evaluate_sol_flags(_ input: Operations.post_sol_ofrep_sol_v1_sol_evaluate_sol_flags.Input) async throws -> Operations.post_sol_ofrep_sol_v1_sol_evaluate_sol_flags.Output {
+    internal func postOfrepV1EvaluateFlags(_ input: Operations.PostOfrepV1EvaluateFlags.Input) async throws -> Operations.PostOfrepV1EvaluateFlags.Output {
         try await client.send(
             input: input,
-            forOperation: Operations.post_sol_ofrep_sol_v1_sol_evaluate_sol_flags.id,
+            forOperation: Operations.PostOfrepV1EvaluateFlags.id,
             serializer: { input in
                 let path = try converter.renderedPath(
                     template: "/ofrep/v1/evaluate/flags",
@@ -217,7 +217,7 @@ internal struct Client: APIProtocol {
                 try converter.setHeaderFieldAsURI(
                     in: &request.headerFields,
                     name: "If-None-Match",
-                    value: input.headers.If_hyphen_None_hyphen_Match
+                    value: input.headers.ifNoneMatch
                 )
                 converter.setAcceptHeader(
                     in: &request.headerFields,
@@ -239,13 +239,13 @@ internal struct Client: APIProtocol {
             deserializer: { response, responseBody in
                 switch response.status.code {
                 case 200:
-                    let headers: Operations.post_sol_ofrep_sol_v1_sol_evaluate_sol_flags.Output.Ok.Headers = .init(ETag: try converter.getOptionalHeaderFieldAsURI(
+                    let headers: Operations.PostOfrepV1EvaluateFlags.Output.Ok.Headers = .init(eTag: try converter.getOptionalHeaderFieldAsURI(
                         in: response.headerFields,
                         name: "ETag",
                         as: Swift.String.self
                     ))
                     let contentType = converter.extractContentTypeIfPresent(in: response.headerFields)
-                    let body: Operations.post_sol_ofrep_sol_v1_sol_evaluate_sol_flags.Output.Ok.Body
+                    let body: Operations.PostOfrepV1EvaluateFlags.Output.Ok.Body
                     let chosenContentType = try converter.bestContentType(
                         received: contentType,
                         options: [
@@ -255,7 +255,7 @@ internal struct Client: APIProtocol {
                     switch chosenContentType {
                     case "application/json":
                         body = try await converter.getResponseBodyAsJSON(
-                            Components.Schemas.bulkEvaluationSuccess.self,
+                            Components.Schemas.BulkEvaluationSuccess.self,
                             from: responseBody,
                             transforming: { value in
                                 .json(value)
@@ -272,7 +272,7 @@ internal struct Client: APIProtocol {
                     return .notModified(.init())
                 case 400:
                     let contentType = converter.extractContentTypeIfPresent(in: response.headerFields)
-                    let body: Operations.post_sol_ofrep_sol_v1_sol_evaluate_sol_flags.Output.BadRequest.Body
+                    let body: Operations.PostOfrepV1EvaluateFlags.Output.BadRequest.Body
                     let chosenContentType = try converter.bestContentType(
                         received: contentType,
                         options: [
@@ -282,7 +282,7 @@ internal struct Client: APIProtocol {
                     switch chosenContentType {
                     case "application/json":
                         body = try await converter.getResponseBodyAsJSON(
-                            Components.Schemas.bulkEvaluationFailure.self,
+                            Components.Schemas.BulkEvaluationFailure.self,
                             from: responseBody,
                             transforming: { value in
                                 .json(value)
@@ -297,7 +297,7 @@ internal struct Client: APIProtocol {
                 case 403:
                     return .forbidden(.init())
                 case 429:
-                    let headers: Operations.post_sol_ofrep_sol_v1_sol_evaluate_sol_flags.Output.TooManyRequests.Headers = .init(Retry_hyphen_After: try converter.getOptionalHeaderFieldAsURI(
+                    let headers: Operations.PostOfrepV1EvaluateFlags.Output.TooManyRequests.Headers = .init(retryAfter: try converter.getOptionalHeaderFieldAsURI(
                         in: response.headerFields,
                         name: "Retry-After",
                         as: Foundation.Date.self
@@ -305,7 +305,7 @@ internal struct Client: APIProtocol {
                     return .tooManyRequests(.init(headers: headers))
                 case 500:
                     let contentType = converter.extractContentTypeIfPresent(in: response.headerFields)
-                    let body: Operations.post_sol_ofrep_sol_v1_sol_evaluate_sol_flags.Output.InternalServerError.Body
+                    let body: Operations.PostOfrepV1EvaluateFlags.Output.InternalServerError.Body
                     let chosenContentType = try converter.bestContentType(
                         received: contentType,
                         options: [
@@ -315,7 +315,7 @@ internal struct Client: APIProtocol {
                     switch chosenContentType {
                     case "application/json":
                         body = try await converter.getResponseBodyAsJSON(
-                            Components.Schemas.generalErrorResponse.self,
+                            Components.Schemas.GeneralErrorResponse.self,
                             from: responseBody,
                             transforming: { value in
                                 .json(value)
@@ -345,10 +345,10 @@ internal struct Client: APIProtocol {
     ///
     /// - Remark: HTTP `GET /ofrep/v1/configuration`.
     /// - Remark: Generated from `#/paths//ofrep/v1/configuration/get`.
-    internal func get_sol_ofrep_sol_v1_sol_configuration(_ input: Operations.get_sol_ofrep_sol_v1_sol_configuration.Input) async throws -> Operations.get_sol_ofrep_sol_v1_sol_configuration.Output {
+    internal func getOfrepV1Configuration(_ input: Operations.GetOfrepV1Configuration.Input) async throws -> Operations.GetOfrepV1Configuration.Output {
         try await client.send(
             input: input,
-            forOperation: Operations.get_sol_ofrep_sol_v1_sol_configuration.id,
+            forOperation: Operations.GetOfrepV1Configuration.id,
             serializer: { input in
                 let path = try converter.renderedPath(
                     template: "/ofrep/v1/configuration",
@@ -362,7 +362,7 @@ internal struct Client: APIProtocol {
                 try converter.setHeaderFieldAsURI(
                     in: &request.headerFields,
                     name: "If-None-Match",
-                    value: input.headers.If_hyphen_None_hyphen_Match
+                    value: input.headers.ifNoneMatch
                 )
                 converter.setAcceptHeader(
                     in: &request.headerFields,
@@ -373,13 +373,13 @@ internal struct Client: APIProtocol {
             deserializer: { response, responseBody in
                 switch response.status.code {
                 case 200:
-                    let headers: Operations.get_sol_ofrep_sol_v1_sol_configuration.Output.Ok.Headers = .init(ETag: try converter.getOptionalHeaderFieldAsURI(
+                    let headers: Operations.GetOfrepV1Configuration.Output.Ok.Headers = .init(eTag: try converter.getOptionalHeaderFieldAsURI(
                         in: response.headerFields,
                         name: "ETag",
                         as: Swift.String.self
                     ))
                     let contentType = converter.extractContentTypeIfPresent(in: response.headerFields)
-                    let body: Operations.get_sol_ofrep_sol_v1_sol_configuration.Output.Ok.Body
+                    let body: Operations.GetOfrepV1Configuration.Output.Ok.Body
                     let chosenContentType = try converter.bestContentType(
                         received: contentType,
                         options: [
@@ -389,7 +389,7 @@ internal struct Client: APIProtocol {
                     switch chosenContentType {
                     case "application/json":
                         body = try await converter.getResponseBodyAsJSON(
-                            Components.Schemas.configurationResponse.self,
+                            Components.Schemas.ConfigurationResponse.self,
                             from: responseBody,
                             transforming: { value in
                                 .json(value)
@@ -410,7 +410,7 @@ internal struct Client: APIProtocol {
                     return .forbidden(.init())
                 case 500:
                     let contentType = converter.extractContentTypeIfPresent(in: response.headerFields)
-                    let body: Operations.get_sol_ofrep_sol_v1_sol_configuration.Output.InternalServerError.Body
+                    let body: Operations.GetOfrepV1Configuration.Output.InternalServerError.Body
                     let chosenContentType = try converter.bestContentType(
                         received: contentType,
                         options: [
@@ -420,7 +420,7 @@ internal struct Client: APIProtocol {
                     switch chosenContentType {
                     case "application/json":
                         body = try await converter.getResponseBodyAsJSON(
-                            Components.Schemas.generalErrorResponse.self,
+                            Components.Schemas.GeneralErrorResponse.self,
                             from: responseBody,
                             transforming: { value in
                                 .json(value)

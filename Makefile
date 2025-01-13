@@ -14,6 +14,7 @@ $(GEN_SWIFTS): $(OPENAPI_SPEC) $(OPENAPI_GEN_SWIFT)
 		$(OPENAPI_SPEC) \
 		--mode types \
 		--mode client \
+		--naming-strategy idiomatic \
 		--output-directory $(GEN_SWIFT_ROOT)
 
 .PHONY: generate
