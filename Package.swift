@@ -3,18 +3,13 @@ import PackageDescription
 
 let package = Package(
     name: "swift-ofrep",
-    platforms: [
-        .macOS(.v10_15),
-        .iOS(.v13),
-        .watchOS(.v6),
-        .tvOS(.v13),
-    ],
+    platforms: [.macOS(.v15)],
     products: [
         .library(name: "OFREP", targets: ["OFREP"])
     ],
     dependencies: [
         .package(url: "https://github.com/swift-open-feature/swift-open-feature.git", branch: "main"),
-        .package(url: "https://github.com/apple/swift-openapi-generator.git", from: "1.0.0"),
+        .package(url: "https://github.com/apple/swift-openapi-generator.git", from: "1.7.0"),
         .package(url: "https://github.com/apple/swift-openapi-runtime.git", from: "1.0.0"),
     ],
     targets: [
