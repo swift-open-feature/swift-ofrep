@@ -231,6 +231,50 @@ internal enum Components {
                 case context
             }
         }
+        /// - Remark: Generated from `#/components/schemas/serverEvaluationSuccess`.
+        internal struct ServerEvaluationSuccess: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/serverEvaluationSuccess/value1`.
+            internal var value1: Components.Schemas.EvaluationSuccess
+            /// - Remark: Generated from `#/components/schemas/serverEvaluationSuccess/value2`.
+            internal struct Value2Payload: Codable, Hashable, Sendable {
+                /// Let the provider know that this flag evaluation can be cached
+                ///
+                /// - Remark: Generated from `#/components/schemas/serverEvaluationSuccess/value2/cacheable`.
+                internal var cacheable: Swift.Bool?
+                /// Creates a new `Value2Payload`.
+                ///
+                /// - Parameters:
+                ///   - cacheable: Let the provider know that this flag evaluation can be cached
+                internal init(cacheable: Swift.Bool? = nil) {
+                    self.cacheable = cacheable
+                }
+                internal enum CodingKeys: String, CodingKey {
+                    case cacheable
+                }
+            }
+            /// - Remark: Generated from `#/components/schemas/serverEvaluationSuccess/value2`.
+            internal var value2: Components.Schemas.ServerEvaluationSuccess.Value2Payload
+            /// Creates a new `ServerEvaluationSuccess`.
+            ///
+            /// - Parameters:
+            ///   - value1:
+            ///   - value2:
+            internal init(
+                value1: Components.Schemas.EvaluationSuccess,
+                value2: Components.Schemas.ServerEvaluationSuccess.Value2Payload
+            ) {
+                self.value1 = value1
+                self.value2 = value2
+            }
+            internal init(from decoder: any Decoder) throws {
+                self.value1 = try .init(from: decoder)
+                self.value2 = try .init(from: decoder)
+            }
+            internal func encode(to encoder: any Encoder) throws {
+                try self.value1.encode(to: encoder)
+                try self.value2.encode(to: encoder)
+            }
+        }
         /// Flag evaluation success response.
         ///
         /// - Remark: Generated from `#/components/schemas/evaluationSuccess`.
@@ -688,21 +732,27 @@ internal enum Components {
                 internal var cacheInvalidation: Components.Schemas.FeatureCacheInvalidation?
                 /// - Remark: Generated from `#/components/schemas/configurationResponse/capabilities/flagEvaluation`.
                 internal var flagEvaluation: Components.Schemas.FlagEvaluation?
+                /// - Remark: Generated from `#/components/schemas/configurationResponse/capabilities/caching`.
+                internal var caching: Components.Schemas.FeatureCaching?
                 /// Creates a new `CapabilitiesPayload`.
                 ///
                 /// - Parameters:
                 ///   - cacheInvalidation:
                 ///   - flagEvaluation:
+                ///   - caching:
                 internal init(
                     cacheInvalidation: Components.Schemas.FeatureCacheInvalidation? = nil,
-                    flagEvaluation: Components.Schemas.FlagEvaluation? = nil
+                    flagEvaluation: Components.Schemas.FlagEvaluation? = nil,
+                    caching: Components.Schemas.FeatureCaching? = nil
                 ) {
                     self.cacheInvalidation = cacheInvalidation
                     self.flagEvaluation = flagEvaluation
+                    self.caching = caching
                 }
                 internal enum CodingKeys: String, CodingKey {
                     case cacheInvalidation
                     case flagEvaluation
+                    case caching
                 }
             }
             /// Capabilities of the flag management system and how to configure them in the provider.
@@ -809,6 +859,35 @@ internal enum Components {
                 case minPollingIntervalMs
             }
         }
+        /// Configuration of the caching mechanism in the provider (used by server providers)
+        ///
+        /// - Remark: Generated from `#/components/schemas/featureCaching`.
+        internal struct FeatureCaching: Codable, Hashable, Sendable {
+            /// set to true if you want the provider to cache the evaluation results
+            ///
+            /// - Remark: Generated from `#/components/schemas/featureCaching/enabled`.
+            internal var enabled: Swift.Bool?
+            /// number (in millisecond) to wait before invalidating the cache. If we have cacheInvalidation enabled, the cache can also be evicted if a configuration change happen.
+            ///
+            /// - Remark: Generated from `#/components/schemas/featureCaching/ttl`.
+            internal var ttl: Swift.Double?
+            /// Creates a new `FeatureCaching`.
+            ///
+            /// - Parameters:
+            ///   - enabled: set to true if you want the provider to cache the evaluation results
+            ///   - ttl: number (in millisecond) to wait before invalidating the cache. If we have cacheInvalidation enabled, the cache can also be evicted if a configuration change happen.
+            internal init(
+                enabled: Swift.Bool? = nil,
+                ttl: Swift.Double? = nil
+            ) {
+                self.enabled = enabled
+                self.ttl = ttl
+            }
+            internal enum CodingKeys: String, CodingKey {
+                case enabled
+                case ttl
+            }
+        }
     }
     /// Types generated from the `#/components/parameters` section of the OpenAPI document.
     internal enum Parameters {}
@@ -885,12 +964,12 @@ internal enum Operations {
                 /// - Remark: Generated from `#/paths/ofrep/v1/evaluate/flags/{key}/POST/responses/200/content`.
                 internal enum Body: Sendable, Hashable {
                     /// - Remark: Generated from `#/paths/ofrep/v1/evaluate/flags/{key}/POST/responses/200/content/application\/json`.
-                    case json(Components.Schemas.EvaluationSuccess)
+                    case json(Components.Schemas.ServerEvaluationSuccess)
                     /// The associated value of the enum case if `self` is `.json`.
                     ///
                     /// - Throws: An error if `self` is not `.json`.
                     /// - SeeAlso: `.json`.
-                    internal var json: Components.Schemas.EvaluationSuccess {
+                    internal var json: Components.Schemas.ServerEvaluationSuccess {
                         get throws {
                             switch self {
                             case let .json(body):
