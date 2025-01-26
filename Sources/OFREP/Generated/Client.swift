@@ -11,7 +11,7 @@ import struct Foundation.Date
 #endif
 import HTTPTypes
 /// OFREP define the protocol for remote flag evaluations
-internal struct Client: APIProtocol {
+package struct Client: APIProtocol {
     /// The underlying HTTP client.
     private let client: UniversalClient
     /// Creates a new client.
@@ -22,7 +22,7 @@ internal struct Client: APIProtocol {
     ///   - configuration: A set of configuration values for the client.
     ///   - transport: A transport that performs HTTP operations.
     ///   - middlewares: A list of middlewares to call before the transport.
-    internal init(
+    package init(
         serverURL: Foundation.URL,
         configuration: Configuration = .init(),
         transport: any ClientTransport,
@@ -46,7 +46,7 @@ internal struct Client: APIProtocol {
     ///
     /// - Remark: HTTP `POST /ofrep/v1/evaluate/flags/{key}`.
     /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/{key}/post`.
-    internal func postOfrepV1EvaluateFlagsKey(_ input: Operations.PostOfrepV1EvaluateFlagsKey.Input) async throws -> Operations.PostOfrepV1EvaluateFlagsKey.Output {
+    package func postOfrepV1EvaluateFlagsKey(_ input: Operations.PostOfrepV1EvaluateFlagsKey.Input) async throws -> Operations.PostOfrepV1EvaluateFlagsKey.Output {
         try await client.send(
             input: input,
             forOperation: Operations.PostOfrepV1EvaluateFlagsKey.id,
@@ -200,7 +200,7 @@ internal struct Client: APIProtocol {
     ///
     /// - Remark: HTTP `POST /ofrep/v1/evaluate/flags`.
     /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/post`.
-    internal func postOfrepV1EvaluateFlags(_ input: Operations.PostOfrepV1EvaluateFlags.Input) async throws -> Operations.PostOfrepV1EvaluateFlags.Output {
+    package func postOfrepV1EvaluateFlags(_ input: Operations.PostOfrepV1EvaluateFlags.Input) async throws -> Operations.PostOfrepV1EvaluateFlags.Output {
         try await client.send(
             input: input,
             forOperation: Operations.PostOfrepV1EvaluateFlags.id,
@@ -345,7 +345,7 @@ internal struct Client: APIProtocol {
     ///
     /// - Remark: HTTP `GET /ofrep/v1/configuration`.
     /// - Remark: Generated from `#/paths//ofrep/v1/configuration/get`.
-    internal func getOfrepV1Configuration(_ input: Operations.GetOfrepV1Configuration.Input) async throws -> Operations.GetOfrepV1Configuration.Output {
+    package func getOfrepV1Configuration(_ input: Operations.GetOfrepV1Configuration.Input) async throws -> Operations.GetOfrepV1Configuration.Output {
         try await client.send(
             input: input,
             forOperation: Operations.GetOfrepV1Configuration.id,
