@@ -13,3 +13,7 @@ jobs:
     name: Unit Test
     uses: ./.github/workflows/unit-test.yaml
     secrets: inherit
+
+  integration_test:
+    name: Integration Test
+    uses: ./.github/workflows/integration-test.yaml
