@@ -15,6 +15,37 @@ import Foundation
 import OpenAPIRuntime
 import OpenFeature
 
+extension Components.Schemas.EvaluationRequest {
+    package init<Value: OpenFeatureValue>(
+        flag: String,
+        defaultValue: Value,
+        context: OpenFeatureEvaluationContext?
+    ) throws(EvaluationRequestSerializationError<Value>) {
+        let serializedContext: Components.Schemas.Context?
+        do {
+            serializedContext = try context.map(Components.Schemas.Context.init)
+        } catch {
+            throw EvaluationRequestSerializationError(
+                value: defaultValue,
+                error: OpenFeatureResolutionError(code: .invalidContext, message: "\(error)"),
+                reason: .error
+            )
+        }
+
+        self.init(context: serializedContext)
+    }
+}
+
+package struct EvaluationRequestSerializationError<Value: OpenFeatureValue>: Error {
+    let value: Value
+    let error: OpenFeatureResolutionError
+    let reason: OpenFeatureResolutionReason
+
+    var resolution: OpenFeatureResolution<Value> {
+        OpenFeatureResolution(value: value, error: error, reason: reason)
+    }
+}
+
 extension Components.Schemas.Context {
     package init(_ context: OpenFeatureEvaluationContext) throws {
         let additionalProperties = try OpenAPIObjectContainer(context.fields)
