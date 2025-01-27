@@ -1,0 +1,50 @@
+{
+  "$schema": "https://flagd.dev/schema/v0/flags.json",
+  "flags": {
+    "static-on": {
+      "state": "ENABLED",
+      "variants": {
+        "on": true,
+        "off": false
+      },
+      "defaultVariant": "on"
+    },
+    "static-off": {
+      "state": "ENABLED",
+      "variants": {
+        "on": true,
+        "off": false
+      },
+      "defaultVariant": "off"
+    },
+    "targeting-on": {
+      "state": "ENABLED",
+      "variants": {
+        "on": true,
+        "off": false
+      },
+      "defaultVariant": "off",
+      "targeting": {
+        "if": [
+          {
+            "===": [
+              {
+                "var": "targetingKey"
+              },
+              "swift"
+            ]
+          },
+          "on"
+        ]
+      }
+    },
+    "static-a-b": {
+      "state": "ENABLED",
+      "variants": {
+        "a": "a",
+        "b": "b"
+      },
+      "defaultVariant": "a"
+    }
+  }
+}
