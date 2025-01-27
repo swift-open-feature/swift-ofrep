@@ -1,0 +1,14 @@
+name: swift-ofrep-integration-test
+services:
+  flagd:
+    image: ghcr.io/open-feature/flagd:latest
+    ports:
+      - 8016:8016 # OFREP
+    volumes:
+      - ./integration.flagd.json:/etc/flagd/integration.flagd.json
+    command: [
+      "start",
+      "--uri",
+      "file:./etc/flagd/integration.flagd.json",
+      "--debug"
+    ]
