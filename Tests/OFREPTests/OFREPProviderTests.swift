@@ -153,13 +153,6 @@ final class OFREPProviderTests {
 
     @Test("Graceful shutdown")
     func shutsDownTransport() async throws {
-        /// A no-op service which is used to shut down the service group upon successful termination.
-        struct ShutdownTrigger: Service, CustomStringConvertible {
-            let description = "ShutdownTrigger"
-
-            func run() async throws {}
-        }
-
         let transport = RecordingOFREPClientTransport()
         let provider = OFREPProvider(transport: transport)
 
@@ -167,10 +160,7 @@ final class OFREPProviderTests {
 
         let group = ServiceGroup(
             configuration: .init(
-                services: [
-                    .init(service: provider),
-                    .init(service: ShutdownTrigger(), successTerminationBehavior: .gracefullyShutdownGroup),
-                ],
+                services: [.init(service: provider), .shutdownTrigger],
                 logger: Logger(label: "test")
             )
         )
@@ -280,8 +270,4 @@ extension OFREPProvider<ClosureOFREPClientTransport> {
     fileprivate init(transport: Transport) {
         self.init(serverURL: .stub, transport: transport)
     }
-}
-
-extension URL {
-    fileprivate static let stub = URL(string: "http://stub.stub")!
 }

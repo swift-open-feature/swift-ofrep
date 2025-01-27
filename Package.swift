@@ -11,6 +11,7 @@ let package = Package(
         .package(url: "https://github.com/swift-open-feature/swift-open-feature.git", branch: "main"),
         .package(url: "https://github.com/apple/swift-openapi-generator.git", from: "1.7.0"),
         .package(url: "https://github.com/apple/swift-openapi-runtime.git", from: "1.0.0"),
+        .package(url: "https://github.com/swift-server/swift-openapi-async-http-client.git", from: "1.0.0"),
     ],
     targets: [
         .target(
@@ -18,6 +19,7 @@ let package = Package(
             dependencies: [
                 .product(name: "OpenFeature", package: "swift-open-feature"),
                 .product(name: "OpenAPIRuntime", package: "swift-openapi-runtime"),
+                .product(name: "OpenAPIAsyncHTTPClient", package: "swift-openapi-async-http-client"),
             ]
         ),
         .testTarget(
