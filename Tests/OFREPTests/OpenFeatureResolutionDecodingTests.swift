@@ -23,7 +23,7 @@ struct OpenFeatureResolutionDecodingTests {
     struct BoolResolutionDecodingTests {
         @Test("Success", arguments: [true, false])
         func success(value: Bool) {
-            let response = Operations.PostOfrepV1EvaluateFlagsKey.Output.ok(
+            let response = Operations.EvaluateFlag.Output.ok(
                 .init(
                     body: .json(
                         Components.Schemas.ServerEvaluationSuccess(
@@ -32,7 +32,11 @@ struct OpenFeatureResolutionDecodingTests {
                                     key: "flag",
                                     reason: "TARGETING_MATCH",
                                     variant: "b",
-                                    metadata: .init(additionalProperties: ["foo": .case2("bar")])
+                                    metadata: .init(
+                                        value1: .init(additionalProperties: ["foo": .case2("bar")]),
+                                        value2: "",
+                                        value3: ""
+                                    )
                                 ),
                                 value2: .BooleanFlag(.init(value: value))
                             ),
@@ -55,7 +59,7 @@ struct OpenFeatureResolutionDecodingTests {
 
         @Test("Bad request", arguments: ["Targeting key is required.", nil])
         func badRequest(message: String?) {
-            let response = Operations.PostOfrepV1EvaluateFlagsKey.Output.badRequest(
+            let response = Operations.EvaluateFlag.Output.badRequest(
                 .init(
                     body: .json(
                         .init(
@@ -78,7 +82,7 @@ struct OpenFeatureResolutionDecodingTests {
 
         @Test("Not found", arguments: ["Flag not found.", nil])
         func notFound(message: String?) {
-            let response = Operations.PostOfrepV1EvaluateFlagsKey.Output.notFound(
+            let response = Operations.EvaluateFlag.Output.notFound(
                 .init(
                     body: .json(
                         .init(
@@ -101,7 +105,7 @@ struct OpenFeatureResolutionDecodingTests {
 
         @Test("Unauthorized")
         func unauthorized() throws {
-            let response = Operations.PostOfrepV1EvaluateFlagsKey.Output.unauthorized(.init())
+            let response = Operations.EvaluateFlag.Output.unauthorized(.init())
 
             let resolution = OpenFeatureResolution(
                 value: false,
@@ -114,7 +118,7 @@ struct OpenFeatureResolutionDecodingTests {
 
         @Test("Forbidden")
         func forbidden() throws {
-            let response = Operations.PostOfrepV1EvaluateFlagsKey.Output.forbidden(.init())
+            let response = Operations.EvaluateFlag.Output.forbidden(.init())
 
             let resolution = OpenFeatureResolution(
                 value: false,
@@ -127,7 +131,7 @@ struct OpenFeatureResolutionDecodingTests {
 
         @Test("Too many requests without retry date")
         func tooManyRequests() throws {
-            let response = Operations.PostOfrepV1EvaluateFlagsKey.Output.tooManyRequests(.init())
+            let response = Operations.EvaluateFlag.Output.tooManyRequests(.init())
 
             let resolution = OpenFeatureResolution(
                 value: false,
@@ -140,7 +144,7 @@ struct OpenFeatureResolutionDecodingTests {
 
         @Test("Too many requests with retry date")
         func tooManyRequestsWithRetryDate() throws {
-            let response = Operations.PostOfrepV1EvaluateFlagsKey.Output.tooManyRequests(
+            let response = Operations.EvaluateFlag.Output.tooManyRequests(
                 .init(headers: .init(retryAfter: Date(timeIntervalSince1970: 1_737_935_656)))
             )
 
@@ -158,7 +162,7 @@ struct OpenFeatureResolutionDecodingTests {
 
         @Test("Internal server error", arguments: ["Database connection failed.", nil])
         func internalServerError(message: String?) throws {
-            let response = Operations.PostOfrepV1EvaluateFlagsKey.Output.internalServerError(
+            let response = Operations.EvaluateFlag.Output.internalServerError(
                 .init(body: .json(.init(errorDetails: message)))
             )
 
@@ -173,7 +177,7 @@ struct OpenFeatureResolutionDecodingTests {
 
         @Test("Unknown status code")
         func internalServerError() throws {
-            let response = Operations.PostOfrepV1EvaluateFlagsKey.Output.undocumented(statusCode: 418, .init())
+            let response = Operations.EvaluateFlag.Output.undocumented(statusCode: 418, .init())
 
             let resolution = OpenFeatureResolution(
                 value: false,
@@ -195,7 +199,11 @@ struct OpenFeatureResolutionDecodingTests {
                         key: "flag",
                         reason: "TARGETING_MATCH",
                         variant: "b",
-                        metadata: .init(additionalProperties: ["foo": .case2("bar")])
+                        metadata: .init(
+                            value1: .init(additionalProperties: ["foo": .case2("bar")]),
+                            value2: "",
+                            value3: ""
+                        )
                     ),
                     value2: .StringFlag(.init(value: "💩"))
                 ),
@@ -238,7 +246,11 @@ struct OpenFeatureResolutionDecodingTests {
         @Test("Bool value", arguments: [true, false])
         func boolValue(value: Bool) {
             let payload = Components.Schemas.EvaluationSuccess.Value1Payload.MetadataPayload?(
-                .init(additionalProperties: ["key": .case1(value)])
+                .init(
+                    value1: .init(additionalProperties: ["key": .case1(value)]),
+                    value2: "",
+                    value3: ""
+                )
             )
 
             #expect(payload.toFlagMetadata() == ["key": .bool(value)])
@@ -247,7 +259,11 @@ struct OpenFeatureResolutionDecodingTests {
         @Test("String value")
         func stringValue() {
             let payload = Components.Schemas.EvaluationSuccess.Value1Payload.MetadataPayload?(
-                .init(additionalProperties: ["key": .case2("value")])
+                .init(
+                    value1: .init(additionalProperties: ["key": .case2("value")]),
+                    value2: "",
+                    value3: ""
+                )
             )
 
             #expect(payload.toFlagMetadata() == ["key": .string("value")])
@@ -256,7 +272,11 @@ struct OpenFeatureResolutionDecodingTests {
         @Test("Double value", arguments: [-Double.greatestFiniteMagnitude, 42, Double.greatestFiniteMagnitude])
         func doubleValue(value: Double) {
             let payload = Components.Schemas.EvaluationSuccess.Value1Payload.MetadataPayload?(
-                .init(additionalProperties: ["key": .case3(value)])
+                .init(
+                    value1: .init(additionalProperties: ["key": .case3(value)]),
+                    value2: "",
+                    value3: ""
+                )
             )
 
             #expect(payload.toFlagMetadata() == ["key": .double(value)])

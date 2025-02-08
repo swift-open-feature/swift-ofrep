@@ -43,7 +43,7 @@ public struct OFREPProvider<Transport: OFREPClientTransport>: OpenFeatureProvide
 
         do {
             do {
-                let response = try await client.postOfrepV1EvaluateFlagsKey(
+                let response = try await client.evaluateFlag(
                     path: .init(key: flag),
                     headers: .init(accept: [.init(contentType: .json)]),
                     body: .json(request)

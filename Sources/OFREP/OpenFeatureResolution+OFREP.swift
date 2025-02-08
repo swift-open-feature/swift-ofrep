@@ -14,7 +14,7 @@
 import OpenFeature
 
 extension OpenFeatureResolution<Bool> {
-    package init(_ response: Operations.PostOfrepV1EvaluateFlagsKey.Output, defaultValue: Bool) {
+    package init(_ response: Operations.EvaluateFlag.Output, defaultValue: Bool) {
         switch response {
         case .ok(let ok):
             switch ok.body {
@@ -126,13 +126,13 @@ extension OpenFeatureResolution<Bool> {
 
 extension Components.Schemas.EvaluationSuccess.Value1Payload.MetadataPayload? {
     package func toFlagMetadata() -> [String: OpenFeatureFlagMetadataValue] {
-        self?.additionalProperties.mapValues(OpenFeatureFlagMetadataValue.init) ?? [:]
+        self?.value1.additionalProperties.mapValues(OpenFeatureFlagMetadataValue.init) ?? [:]
     }
 }
 
 extension OpenFeatureFlagMetadataValue {
     package init(
-        _ payload: Components.Schemas.EvaluationSuccess.Value1Payload.MetadataPayload.AdditionalPropertiesPayload
+        _ payload: Components.Schemas.Metadata.AdditionalPropertiesPayload
     ) {
         self =
             switch payload {
