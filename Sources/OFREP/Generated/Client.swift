@@ -45,11 +45,11 @@ package struct Client: APIProtocol {
     ///
     ///
     /// - Remark: HTTP `POST /ofrep/v1/evaluate/flags/{key}`.
-    /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/{key}/post`.
-    package func postOfrepV1EvaluateFlagsKey(_ input: Operations.PostOfrepV1EvaluateFlagsKey.Input) async throws -> Operations.PostOfrepV1EvaluateFlagsKey.Output {
+    /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/{key}/post(evaluateFlag)`.
+    package func evaluateFlag(_ input: Operations.EvaluateFlag.Input) async throws -> Operations.EvaluateFlag.Output {
         try await client.send(
             input: input,
-            forOperation: Operations.PostOfrepV1EvaluateFlagsKey.id,
+            forOperation: Operations.EvaluateFlag.id,
             serializer: { input in
                 let path = try converter.renderedPath(
                     template: "/ofrep/v1/evaluate/flags/{}",
@@ -83,7 +83,7 @@ package struct Client: APIProtocol {
                 switch response.status.code {
                 case 200:
                     let contentType = converter.extractContentTypeIfPresent(in: response.headerFields)
-                    let body: Operations.PostOfrepV1EvaluateFlagsKey.Output.Ok.Body
+                    let body: Operations.EvaluateFlag.Output.Ok.Body
                     let chosenContentType = try converter.bestContentType(
                         received: contentType,
                         options: [
@@ -105,7 +105,7 @@ package struct Client: APIProtocol {
                     return .ok(.init(body: body))
                 case 400:
                     let contentType = converter.extractContentTypeIfPresent(in: response.headerFields)
-                    let body: Operations.PostOfrepV1EvaluateFlagsKey.Output.BadRequest.Body
+                    let body: Operations.EvaluateFlag.Output.BadRequest.Body
                     let chosenContentType = try converter.bestContentType(
                         received: contentType,
                         options: [
@@ -127,7 +127,7 @@ package struct Client: APIProtocol {
                     return .badRequest(.init(body: body))
                 case 404:
                     let contentType = converter.extractContentTypeIfPresent(in: response.headerFields)
-                    let body: Operations.PostOfrepV1EvaluateFlagsKey.Output.NotFound.Body
+                    let body: Operations.EvaluateFlag.Output.NotFound.Body
                     let chosenContentType = try converter.bestContentType(
                         received: contentType,
                         options: [
@@ -152,7 +152,7 @@ package struct Client: APIProtocol {
                 case 403:
                     return .forbidden(.init())
                 case 429:
-                    let headers: Operations.PostOfrepV1EvaluateFlagsKey.Output.TooManyRequests.Headers = .init(retryAfter: try converter.getOptionalHeaderFieldAsURI(
+                    let headers: Operations.EvaluateFlag.Output.TooManyRequests.Headers = .init(retryAfter: try converter.getOptionalHeaderFieldAsURI(
                         in: response.headerFields,
                         name: "Retry-After",
                         as: Foundation.Date.self
@@ -160,7 +160,7 @@ package struct Client: APIProtocol {
                     return .tooManyRequests(.init(headers: headers))
                 case 500:
                     let contentType = converter.extractContentTypeIfPresent(in: response.headerFields)
-                    let body: Operations.PostOfrepV1EvaluateFlagsKey.Output.InternalServerError.Body
+                    let body: Operations.EvaluateFlag.Output.InternalServerError.Body
                     let chosenContentType = try converter.bestContentType(
                         received: contentType,
                         options: [
@@ -199,11 +199,11 @@ package struct Client: APIProtocol {
     ///
     ///
     /// - Remark: HTTP `POST /ofrep/v1/evaluate/flags`.
-    /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/post`.
-    package func postOfrepV1EvaluateFlags(_ input: Operations.PostOfrepV1EvaluateFlags.Input) async throws -> Operations.PostOfrepV1EvaluateFlags.Output {
+    /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/post(evaluateFlagsBulk)`.
+    package func evaluateFlagsBulk(_ input: Operations.EvaluateFlagsBulk.Input) async throws -> Operations.EvaluateFlagsBulk.Output {
         try await client.send(
             input: input,
-            forOperation: Operations.PostOfrepV1EvaluateFlags.id,
+            forOperation: Operations.EvaluateFlagsBulk.id,
             serializer: { input in
                 let path = try converter.renderedPath(
                     template: "/ofrep/v1/evaluate/flags",
@@ -239,13 +239,13 @@ package struct Client: APIProtocol {
             deserializer: { response, responseBody in
                 switch response.status.code {
                 case 200:
-                    let headers: Operations.PostOfrepV1EvaluateFlags.Output.Ok.Headers = .init(eTag: try converter.getOptionalHeaderFieldAsURI(
+                    let headers: Operations.EvaluateFlagsBulk.Output.Ok.Headers = .init(eTag: try converter.getOptionalHeaderFieldAsURI(
                         in: response.headerFields,
                         name: "ETag",
                         as: Swift.String.self
                     ))
                     let contentType = converter.extractContentTypeIfPresent(in: response.headerFields)
-                    let body: Operations.PostOfrepV1EvaluateFlags.Output.Ok.Body
+                    let body: Operations.EvaluateFlagsBulk.Output.Ok.Body
                     let chosenContentType = try converter.bestContentType(
                         received: contentType,
                         options: [
@@ -272,7 +272,7 @@ package struct Client: APIProtocol {
                     return .notModified(.init())
                 case 400:
                     let contentType = converter.extractContentTypeIfPresent(in: response.headerFields)
-                    let body: Operations.PostOfrepV1EvaluateFlags.Output.BadRequest.Body
+                    let body: Operations.EvaluateFlagsBulk.Output.BadRequest.Body
                     let chosenContentType = try converter.bestContentType(
                         received: contentType,
                         options: [
@@ -297,7 +297,7 @@ package struct Client: APIProtocol {
                 case 403:
                     return .forbidden(.init())
                 case 429:
-                    let headers: Operations.PostOfrepV1EvaluateFlags.Output.TooManyRequests.Headers = .init(retryAfter: try converter.getOptionalHeaderFieldAsURI(
+                    let headers: Operations.EvaluateFlagsBulk.Output.TooManyRequests.Headers = .init(retryAfter: try converter.getOptionalHeaderFieldAsURI(
                         in: response.headerFields,
                         name: "Retry-After",
                         as: Foundation.Date.self
@@ -305,7 +305,7 @@ package struct Client: APIProtocol {
                     return .tooManyRequests(.init(headers: headers))
                 case 500:
                     let contentType = converter.extractContentTypeIfPresent(in: response.headerFields)
-                    let body: Operations.PostOfrepV1EvaluateFlags.Output.InternalServerError.Body
+                    let body: Operations.EvaluateFlagsBulk.Output.InternalServerError.Body
                     let chosenContentType = try converter.bestContentType(
                         received: contentType,
                         options: [
@@ -344,11 +344,11 @@ package struct Client: APIProtocol {
     ///
     ///
     /// - Remark: HTTP `GET /ofrep/v1/configuration`.
-    /// - Remark: Generated from `#/paths//ofrep/v1/configuration/get`.
-    package func getOfrepV1Configuration(_ input: Operations.GetOfrepV1Configuration.Input) async throws -> Operations.GetOfrepV1Configuration.Output {
+    /// - Remark: Generated from `#/paths//ofrep/v1/configuration/get(getConfiguration)`.
+    package func getConfiguration(_ input: Operations.GetConfiguration.Input) async throws -> Operations.GetConfiguration.Output {
         try await client.send(
             input: input,
-            forOperation: Operations.GetOfrepV1Configuration.id,
+            forOperation: Operations.GetConfiguration.id,
             serializer: { input in
                 let path = try converter.renderedPath(
                     template: "/ofrep/v1/configuration",
@@ -373,13 +373,13 @@ package struct Client: APIProtocol {
             deserializer: { response, responseBody in
                 switch response.status.code {
                 case 200:
-                    let headers: Operations.GetOfrepV1Configuration.Output.Ok.Headers = .init(eTag: try converter.getOptionalHeaderFieldAsURI(
+                    let headers: Operations.GetConfiguration.Output.Ok.Headers = .init(eTag: try converter.getOptionalHeaderFieldAsURI(
                         in: response.headerFields,
                         name: "ETag",
                         as: Swift.String.self
                     ))
                     let contentType = converter.extractContentTypeIfPresent(in: response.headerFields)
-                    let body: Operations.GetOfrepV1Configuration.Output.Ok.Body
+                    let body: Operations.GetConfiguration.Output.Ok.Body
                     let chosenContentType = try converter.bestContentType(
                         received: contentType,
                         options: [
@@ -410,7 +410,7 @@ package struct Client: APIProtocol {
                     return .forbidden(.init())
                 case 500:
                     let contentType = converter.extractContentTypeIfPresent(in: response.headerFields)
-                    let body: Operations.GetOfrepV1Configuration.Output.InternalServerError.Body
+                    let body: Operations.GetConfiguration.Output.InternalServerError.Body
                     let chosenContentType = try converter.bestContentType(
                         received: contentType,
                         options: [

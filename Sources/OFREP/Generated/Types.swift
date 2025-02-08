@@ -18,8 +18,8 @@ package protocol APIProtocol: Sendable {
     ///
     ///
     /// - Remark: HTTP `POST /ofrep/v1/evaluate/flags/{key}`.
-    /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/{key}/post`.
-    func postOfrepV1EvaluateFlagsKey(_ input: Operations.PostOfrepV1EvaluateFlagsKey.Input) async throws -> Operations.PostOfrepV1EvaluateFlagsKey.Output
+    /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/{key}/post(evaluateFlag)`.
+    func evaluateFlag(_ input: Operations.EvaluateFlag.Input) async throws -> Operations.EvaluateFlag.Output
     /// OFREP bulk flag evaluation contract
     ///
     /// OFREP bulk evaluation request.
@@ -27,8 +27,8 @@ package protocol APIProtocol: Sendable {
     ///
     ///
     /// - Remark: HTTP `POST /ofrep/v1/evaluate/flags`.
-    /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/post`.
-    func postOfrepV1EvaluateFlags(_ input: Operations.PostOfrepV1EvaluateFlags.Input) async throws -> Operations.PostOfrepV1EvaluateFlags.Output
+    /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/post(evaluateFlagsBulk)`.
+    func evaluateFlagsBulk(_ input: Operations.EvaluateFlagsBulk.Input) async throws -> Operations.EvaluateFlagsBulk.Output
     /// OFREP provider configuration
     ///
     /// OFREP configuration is used to supply information about the remote flag management system and to set up the OpenFeature SDK providers.
@@ -36,8 +36,8 @@ package protocol APIProtocol: Sendable {
     ///
     ///
     /// - Remark: HTTP `GET /ofrep/v1/configuration`.
-    /// - Remark: Generated from `#/paths//ofrep/v1/configuration/get`.
-    func getOfrepV1Configuration(_ input: Operations.GetOfrepV1Configuration.Input) async throws -> Operations.GetOfrepV1Configuration.Output
+    /// - Remark: Generated from `#/paths//ofrep/v1/configuration/get(getConfiguration)`.
+    func getConfiguration(_ input: Operations.GetConfiguration.Input) async throws -> Operations.GetConfiguration.Output
 }
 
 /// Convenience overloads for operation inputs.
@@ -49,13 +49,13 @@ extension APIProtocol {
     ///
     ///
     /// - Remark: HTTP `POST /ofrep/v1/evaluate/flags/{key}`.
-    /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/{key}/post`.
-    package func postOfrepV1EvaluateFlagsKey(
-        path: Operations.PostOfrepV1EvaluateFlagsKey.Input.Path,
-        headers: Operations.PostOfrepV1EvaluateFlagsKey.Input.Headers = .init(),
-        body: Operations.PostOfrepV1EvaluateFlagsKey.Input.Body? = nil
-    ) async throws -> Operations.PostOfrepV1EvaluateFlagsKey.Output {
-        try await postOfrepV1EvaluateFlagsKey(Operations.PostOfrepV1EvaluateFlagsKey.Input(
+    /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/{key}/post(evaluateFlag)`.
+    package func evaluateFlag(
+        path: Operations.EvaluateFlag.Input.Path,
+        headers: Operations.EvaluateFlag.Input.Headers = .init(),
+        body: Operations.EvaluateFlag.Input.Body? = nil
+    ) async throws -> Operations.EvaluateFlag.Output {
+        try await evaluateFlag(Operations.EvaluateFlag.Input(
             path: path,
             headers: headers,
             body: body
@@ -68,12 +68,12 @@ extension APIProtocol {
     ///
     ///
     /// - Remark: HTTP `POST /ofrep/v1/evaluate/flags`.
-    /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/post`.
-    package func postOfrepV1EvaluateFlags(
-        headers: Operations.PostOfrepV1EvaluateFlags.Input.Headers = .init(),
-        body: Operations.PostOfrepV1EvaluateFlags.Input.Body? = nil
-    ) async throws -> Operations.PostOfrepV1EvaluateFlags.Output {
-        try await postOfrepV1EvaluateFlags(Operations.PostOfrepV1EvaluateFlags.Input(
+    /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/post(evaluateFlagsBulk)`.
+    package func evaluateFlagsBulk(
+        headers: Operations.EvaluateFlagsBulk.Input.Headers = .init(),
+        body: Operations.EvaluateFlagsBulk.Input.Body? = nil
+    ) async throws -> Operations.EvaluateFlagsBulk.Output {
+        try await evaluateFlagsBulk(Operations.EvaluateFlagsBulk.Input(
             headers: headers,
             body: body
         ))
@@ -85,9 +85,9 @@ extension APIProtocol {
     ///
     ///
     /// - Remark: HTTP `GET /ofrep/v1/configuration`.
-    /// - Remark: Generated from `#/paths//ofrep/v1/configuration/get`.
-    package func getOfrepV1Configuration(headers: Operations.GetOfrepV1Configuration.Input.Headers = .init()) async throws -> Operations.GetOfrepV1Configuration.Output {
-        try await getOfrepV1Configuration(Operations.GetOfrepV1Configuration.Input(headers: headers))
+    /// - Remark: Generated from `#/paths//ofrep/v1/configuration/get(getConfiguration)`.
+    package func getConfiguration(headers: Operations.GetConfiguration.Input.Headers = .init()) async throws -> Operations.GetConfiguration.Output {
+        try await getConfiguration(Operations.GetConfiguration.Input(headers: headers))
     }
 }
 
@@ -174,15 +174,25 @@ package enum Components {
             package typealias FlagsPayload = [Components.Schemas.BulkEvaluationSuccess.FlagsPayloadPayload]
             /// - Remark: Generated from `#/components/schemas/bulkEvaluationSuccess/flags`.
             package var flags: Components.Schemas.BulkEvaluationSuccess.FlagsPayload
+            /// Arbitrary metadata for the flag set, useful for telemetry and documentary purposes.
+            ///
+            /// - Remark: Generated from `#/components/schemas/bulkEvaluationSuccess/metadata`.
+            package var metadata: Components.Schemas.Metadata?
             /// Creates a new `BulkEvaluationSuccess`.
             ///
             /// - Parameters:
             ///   - flags:
-            package init(flags: Components.Schemas.BulkEvaluationSuccess.FlagsPayload) {
+            ///   - metadata: Arbitrary metadata for the flag set, useful for telemetry and documentary purposes.
+            package init(
+                flags: Components.Schemas.BulkEvaluationSuccess.FlagsPayload,
+                metadata: Components.Schemas.Metadata? = nil
+            ) {
                 self.flags = flags
+                self.metadata = metadata
             }
             package enum CodingKeys: String, CodingKey {
                 case flags
+                case metadata
             }
         }
         /// Bulk evaluation failure response
@@ -291,73 +301,40 @@ package enum Components {
                 ///
                 /// - Remark: Generated from `#/components/schemas/evaluationSuccess/value1/variant`.
                 package var variant: Swift.String?
-                /// Arbitrary metadata supporting flag evaluation
-                ///
                 /// - Remark: Generated from `#/components/schemas/evaluationSuccess/value1/metadata`.
                 package struct MetadataPayload: Codable, Hashable, Sendable {
-                    /// - Remark: Generated from `#/components/schemas/evaluationSuccess/value1/metadata/additionalProperties`.
-                    @frozen package enum AdditionalPropertiesPayload: Codable, Hashable, Sendable {
-                        /// - Remark: Generated from `#/components/schemas/evaluationSuccess/value1/metadata/additionalProperties/case1`.
-                        case case1(Swift.Bool)
-                        /// - Remark: Generated from `#/components/schemas/evaluationSuccess/value1/metadata/additionalProperties/case2`.
-                        case case2(Swift.String)
-                        /// - Remark: Generated from `#/components/schemas/evaluationSuccess/value1/metadata/additionalProperties/case3`.
-                        case case3(Swift.Double)
-                        package init(from decoder: any Decoder) throws {
-                            var errors: [any Error] = []
-                            do {
-                                self = .case1(try decoder.decodeFromSingleValueContainer())
-                                return
-                            } catch {
-                                errors.append(error)
-                            }
-                            do {
-                                self = .case2(try decoder.decodeFromSingleValueContainer())
-                                return
-                            } catch {
-                                errors.append(error)
-                            }
-                            do {
-                                self = .case3(try decoder.decodeFromSingleValueContainer())
-                                return
-                            } catch {
-                                errors.append(error)
-                            }
-                            throw Swift.DecodingError.failedToDecodeOneOfSchema(
-                                type: Self.self,
-                                codingPath: decoder.codingPath,
-                                errors: errors
-                            )
-                        }
-                        package func encode(to encoder: any Encoder) throws {
-                            switch self {
-                            case let .case1(value):
-                                try encoder.encodeToSingleValueContainer(value)
-                            case let .case2(value):
-                                try encoder.encodeToSingleValueContainer(value)
-                            case let .case3(value):
-                                try encoder.encodeToSingleValueContainer(value)
-                            }
-                        }
-                    }
-                    /// A container of undocumented properties.
-                    package var additionalProperties: [String: Components.Schemas.EvaluationSuccess.Value1Payload.MetadataPayload.AdditionalPropertiesPayload]
+                    /// - Remark: Generated from `#/components/schemas/evaluationSuccess/value1/metadata/value1`.
+                    package var value1: Components.Schemas.Metadata
+                    /// - Remark: Generated from `#/components/schemas/evaluationSuccess/value1/metadata/value2`.
+                    package var value2: Components.Schemas.FlagMetadataDescription
+                    /// - Remark: Generated from `#/components/schemas/evaluationSuccess/value1/metadata/value3`.
+                    package var value3: Components.Schemas.FlagMetadataExamples
                     /// Creates a new `MetadataPayload`.
                     ///
                     /// - Parameters:
-                    ///   - additionalProperties: A container of undocumented properties.
-                    package init(additionalProperties: [String: Components.Schemas.EvaluationSuccess.Value1Payload.MetadataPayload.AdditionalPropertiesPayload] = .init()) {
-                        self.additionalProperties = additionalProperties
+                    ///   - value1:
+                    ///   - value2:
+                    ///   - value3:
+                    package init(
+                        value1: Components.Schemas.Metadata,
+                        value2: Components.Schemas.FlagMetadataDescription,
+                        value3: Components.Schemas.FlagMetadataExamples
+                    ) {
+                        self.value1 = value1
+                        self.value2 = value2
+                        self.value3 = value3
                     }
                     package init(from decoder: any Decoder) throws {
-                        additionalProperties = try decoder.decodeAdditionalProperties(knownKeys: [])
+                        self.value1 = try .init(from: decoder)
+                        self.value2 = try .init(from: decoder)
+                        self.value3 = try .init(from: decoder)
                     }
                     package func encode(to encoder: any Encoder) throws {
-                        try encoder.encodeAdditionalProperties(additionalProperties)
+                        try self.value1.encode(to: encoder)
+                        try self.value2.encode(to: encoder)
+                        try self.value3.encode(to: encoder)
                     }
                 }
-                /// Arbitrary metadata supporting flag evaluation
-                ///
                 /// - Remark: Generated from `#/components/schemas/evaluationSuccess/value1/metadata`.
                 package var metadata: Components.Schemas.EvaluationSuccess.Value1Payload.MetadataPayload?
                 /// Creates a new `Value1Payload`.
@@ -366,7 +343,7 @@ package enum Components {
                 ///   - key:
                 ///   - reason: An OpenFeature reason for the evaluation
                 ///   - variant: Variant of the evaluated flag value
-                ///   - metadata: Arbitrary metadata supporting flag evaluation
+                ///   - metadata:
                 package init(
                     key: Components.Schemas.Key? = nil,
                     reason: Swift.String? = nil,
@@ -496,25 +473,65 @@ package enum Components {
             package var errorCode: Components.Schemas.EvaluationFailure.ErrorCodePayload
             /// - Remark: Generated from `#/components/schemas/evaluationFailure/errorDetails`.
             package var errorDetails: Components.Schemas.ErrorDetails?
+            /// - Remark: Generated from `#/components/schemas/evaluationFailure/metadata`.
+            package struct MetadataPayload: Codable, Hashable, Sendable {
+                /// - Remark: Generated from `#/components/schemas/evaluationFailure/metadata/value1`.
+                package var value1: Components.Schemas.Metadata
+                /// - Remark: Generated from `#/components/schemas/evaluationFailure/metadata/value2`.
+                package var value2: Components.Schemas.FlagMetadataDescription
+                /// - Remark: Generated from `#/components/schemas/evaluationFailure/metadata/value3`.
+                package var value3: Components.Schemas.FlagMetadataExamples
+                /// Creates a new `MetadataPayload`.
+                ///
+                /// - Parameters:
+                ///   - value1:
+                ///   - value2:
+                ///   - value3:
+                package init(
+                    value1: Components.Schemas.Metadata,
+                    value2: Components.Schemas.FlagMetadataDescription,
+                    value3: Components.Schemas.FlagMetadataExamples
+                ) {
+                    self.value1 = value1
+                    self.value2 = value2
+                    self.value3 = value3
+                }
+                package init(from decoder: any Decoder) throws {
+                    self.value1 = try .init(from: decoder)
+                    self.value2 = try .init(from: decoder)
+                    self.value3 = try .init(from: decoder)
+                }
+                package func encode(to encoder: any Encoder) throws {
+                    try self.value1.encode(to: encoder)
+                    try self.value2.encode(to: encoder)
+                    try self.value3.encode(to: encoder)
+                }
+            }
+            /// - Remark: Generated from `#/components/schemas/evaluationFailure/metadata`.
+            package var metadata: Components.Schemas.EvaluationFailure.MetadataPayload?
             /// Creates a new `EvaluationFailure`.
             ///
             /// - Parameters:
             ///   - key:
             ///   - errorCode: OpenFeature compatible error code. See https://openfeature.dev/specification/types#error-code
             ///   - errorDetails:
+            ///   - metadata:
             package init(
                 key: Components.Schemas.Key,
                 errorCode: Components.Schemas.EvaluationFailure.ErrorCodePayload,
-                errorDetails: Components.Schemas.ErrorDetails? = nil
+                errorDetails: Components.Schemas.ErrorDetails? = nil,
+                metadata: Components.Schemas.EvaluationFailure.MetadataPayload? = nil
             ) {
                 self.key = key
                 self.errorCode = errorCode
                 self.errorDetails = errorDetails
+                self.metadata = metadata
             }
             package enum CodingKeys: String, CodingKey {
                 case key
                 case errorCode
                 case errorDetails
+                case metadata
             }
         }
         /// Flag not found response
@@ -531,25 +548,65 @@ package enum Components {
             package var errorCode: Components.Schemas.FlagNotFound.ErrorCodePayload
             /// - Remark: Generated from `#/components/schemas/flagNotFound/errorDetails`.
             package var errorDetails: Components.Schemas.ErrorDetails?
+            /// - Remark: Generated from `#/components/schemas/flagNotFound/metadata`.
+            package struct MetadataPayload: Codable, Hashable, Sendable {
+                /// - Remark: Generated from `#/components/schemas/flagNotFound/metadata/value1`.
+                package var value1: Components.Schemas.Metadata
+                /// - Remark: Generated from `#/components/schemas/flagNotFound/metadata/value2`.
+                package var value2: Components.Schemas.FlagMetadataDescription
+                /// - Remark: Generated from `#/components/schemas/flagNotFound/metadata/value3`.
+                package var value3: Components.Schemas.FlagMetadataExamples
+                /// Creates a new `MetadataPayload`.
+                ///
+                /// - Parameters:
+                ///   - value1:
+                ///   - value2:
+                ///   - value3:
+                package init(
+                    value1: Components.Schemas.Metadata,
+                    value2: Components.Schemas.FlagMetadataDescription,
+                    value3: Components.Schemas.FlagMetadataExamples
+                ) {
+                    self.value1 = value1
+                    self.value2 = value2
+                    self.value3 = value3
+                }
+                package init(from decoder: any Decoder) throws {
+                    self.value1 = try .init(from: decoder)
+                    self.value2 = try .init(from: decoder)
+                    self.value3 = try .init(from: decoder)
+                }
+                package func encode(to encoder: any Encoder) throws {
+                    try self.value1.encode(to: encoder)
+                    try self.value2.encode(to: encoder)
+                    try self.value3.encode(to: encoder)
+                }
+            }
+            /// - Remark: Generated from `#/components/schemas/flagNotFound/metadata`.
+            package var metadata: Components.Schemas.FlagNotFound.MetadataPayload?
             /// Creates a new `FlagNotFound`.
             ///
             /// - Parameters:
             ///   - key:
             ///   - errorCode:
             ///   - errorDetails:
+            ///   - metadata:
             package init(
                 key: Components.Schemas.Key,
                 errorCode: Components.Schemas.FlagNotFound.ErrorCodePayload,
-                errorDetails: Components.Schemas.ErrorDetails? = nil
+                errorDetails: Components.Schemas.ErrorDetails? = nil,
+                metadata: Components.Schemas.FlagNotFound.MetadataPayload? = nil
             ) {
                 self.key = key
                 self.errorCode = errorCode
                 self.errorDetails = errorDetails
+                self.metadata = metadata
             }
             package enum CodingKeys: String, CodingKey {
                 case key
                 case errorCode
                 case errorDetails
+                case metadata
             }
         }
         /// A general error response from the service
@@ -888,6 +945,75 @@ package enum Components {
                 case ttl
             }
         }
+        /// - Remark: Generated from `#/components/schemas/metadata`.
+        package struct Metadata: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/metadata/additionalProperties`.
+            @frozen package enum AdditionalPropertiesPayload: Codable, Hashable, Sendable {
+                /// - Remark: Generated from `#/components/schemas/metadata/additionalProperties/case1`.
+                case case1(Swift.Bool)
+                /// - Remark: Generated from `#/components/schemas/metadata/additionalProperties/case2`.
+                case case2(Swift.String)
+                /// - Remark: Generated from `#/components/schemas/metadata/additionalProperties/case3`.
+                case case3(Swift.Double)
+                package init(from decoder: any Decoder) throws {
+                    var errors: [any Error] = []
+                    do {
+                        self = .case1(try decoder.decodeFromSingleValueContainer())
+                        return
+                    } catch {
+                        errors.append(error)
+                    }
+                    do {
+                        self = .case2(try decoder.decodeFromSingleValueContainer())
+                        return
+                    } catch {
+                        errors.append(error)
+                    }
+                    do {
+                        self = .case3(try decoder.decodeFromSingleValueContainer())
+                        return
+                    } catch {
+                        errors.append(error)
+                    }
+                    throw Swift.DecodingError.failedToDecodeOneOfSchema(
+                        type: Self.self,
+                        codingPath: decoder.codingPath,
+                        errors: errors
+                    )
+                }
+                package func encode(to encoder: any Encoder) throws {
+                    switch self {
+                    case let .case1(value):
+                        try encoder.encodeToSingleValueContainer(value)
+                    case let .case2(value):
+                        try encoder.encodeToSingleValueContainer(value)
+                    case let .case3(value):
+                        try encoder.encodeToSingleValueContainer(value)
+                    }
+                }
+            }
+            /// A container of undocumented properties.
+            package var additionalProperties: [String: Components.Schemas.Metadata.AdditionalPropertiesPayload]
+            /// Creates a new `Metadata`.
+            ///
+            /// - Parameters:
+            ///   - additionalProperties: A container of undocumented properties.
+            package init(additionalProperties: [String: Components.Schemas.Metadata.AdditionalPropertiesPayload] = .init()) {
+                self.additionalProperties = additionalProperties
+            }
+            package init(from decoder: any Decoder) throws {
+                additionalProperties = try decoder.decodeAdditionalProperties(knownKeys: [])
+            }
+            package func encode(to encoder: any Encoder) throws {
+                try encoder.encodeAdditionalProperties(additionalProperties)
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/flagMetadataExamples`.
+        package typealias FlagMetadataExamples = OpenAPIRuntime.OpenAPIValueContainer
+        /// Arbitrary metadata for the flag, useful for telemetry and documentary purposes.
+        ///
+        /// - Remark: Generated from `#/components/schemas/flagMetadataDescription`.
+        package typealias FlagMetadataDescription = OpenAPIRuntime.OpenAPIValueContainer
     }
     /// Types generated from the `#/components/parameters` section of the OpenAPI document.
     package enum Parameters {}
@@ -908,9 +1034,9 @@ package enum Operations {
     ///
     ///
     /// - Remark: HTTP `POST /ofrep/v1/evaluate/flags/{key}`.
-    /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/{key}/post`.
-    package enum PostOfrepV1EvaluateFlagsKey {
-        package static let id: Swift.String = "post/ofrep/v1/evaluate/flags/{key}"
+    /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/{key}/post(evaluateFlag)`.
+    package enum EvaluateFlag {
+        package static let id: Swift.String = "evaluateFlag"
         package struct Input: Sendable, Hashable {
             /// - Remark: Generated from `#/paths/ofrep/v1/evaluate/flags/{key}/POST/path`.
             package struct Path: Sendable, Hashable {
@@ -924,25 +1050,25 @@ package enum Operations {
                     self.key = key
                 }
             }
-            package var path: Operations.PostOfrepV1EvaluateFlagsKey.Input.Path
+            package var path: Operations.EvaluateFlag.Input.Path
             /// - Remark: Generated from `#/paths/ofrep/v1/evaluate/flags/{key}/POST/header`.
             package struct Headers: Sendable, Hashable {
-                package var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.PostOfrepV1EvaluateFlagsKey.AcceptableContentType>]
+                package var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.EvaluateFlag.AcceptableContentType>]
                 /// Creates a new `Headers`.
                 ///
                 /// - Parameters:
                 ///   - accept:
-                package init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.PostOfrepV1EvaluateFlagsKey.AcceptableContentType>] = .defaultValues()) {
+                package init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.EvaluateFlag.AcceptableContentType>] = .defaultValues()) {
                     self.accept = accept
                 }
             }
-            package var headers: Operations.PostOfrepV1EvaluateFlagsKey.Input.Headers
+            package var headers: Operations.EvaluateFlag.Input.Headers
             /// - Remark: Generated from `#/paths/ofrep/v1/evaluate/flags/{key}/POST/requestBody`.
             @frozen package enum Body: Sendable, Hashable {
                 /// - Remark: Generated from `#/paths/ofrep/v1/evaluate/flags/{key}/POST/requestBody/content/application\/json`.
                 case json(Components.Schemas.EvaluationRequest)
             }
-            package var body: Operations.PostOfrepV1EvaluateFlagsKey.Input.Body?
+            package var body: Operations.EvaluateFlag.Input.Body?
             /// Creates a new `Input`.
             ///
             /// - Parameters:
@@ -950,9 +1076,9 @@ package enum Operations {
             ///   - headers:
             ///   - body:
             package init(
-                path: Operations.PostOfrepV1EvaluateFlagsKey.Input.Path,
-                headers: Operations.PostOfrepV1EvaluateFlagsKey.Input.Headers = .init(),
-                body: Operations.PostOfrepV1EvaluateFlagsKey.Input.Body? = nil
+                path: Operations.EvaluateFlag.Input.Path,
+                headers: Operations.EvaluateFlag.Input.Headers = .init(),
+                body: Operations.EvaluateFlag.Input.Body? = nil
             ) {
                 self.path = path
                 self.headers = headers
@@ -979,26 +1105,26 @@ package enum Operations {
                     }
                 }
                 /// Received HTTP response body
-                package var body: Operations.PostOfrepV1EvaluateFlagsKey.Output.Ok.Body
+                package var body: Operations.EvaluateFlag.Output.Ok.Body
                 /// Creates a new `Ok`.
                 ///
                 /// - Parameters:
                 ///   - body: Received HTTP response body
-                package init(body: Operations.PostOfrepV1EvaluateFlagsKey.Output.Ok.Body) {
+                package init(body: Operations.EvaluateFlag.Output.Ok.Body) {
                     self.body = body
                 }
             }
             /// OFREP successful evaluation response
             ///
-            /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/{key}/post/responses/200`.
+            /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/{key}/post(evaluateFlag)/responses/200`.
             ///
             /// HTTP response code: `200 ok`.
-            case ok(Operations.PostOfrepV1EvaluateFlagsKey.Output.Ok)
+            case ok(Operations.EvaluateFlag.Output.Ok)
             /// The associated value of the enum case if `self` is `.ok`.
             ///
             /// - Throws: An error if `self` is not `.ok`.
             /// - SeeAlso: `.ok`.
-            package var ok: Operations.PostOfrepV1EvaluateFlagsKey.Output.Ok {
+            package var ok: Operations.EvaluateFlag.Output.Ok {
                 get throws {
                     switch self {
                     case let .ok(response):
@@ -1030,26 +1156,26 @@ package enum Operations {
                     }
                 }
                 /// Received HTTP response body
-                package var body: Operations.PostOfrepV1EvaluateFlagsKey.Output.BadRequest.Body
+                package var body: Operations.EvaluateFlag.Output.BadRequest.Body
                 /// Creates a new `BadRequest`.
                 ///
                 /// - Parameters:
                 ///   - body: Received HTTP response body
-                package init(body: Operations.PostOfrepV1EvaluateFlagsKey.Output.BadRequest.Body) {
+                package init(body: Operations.EvaluateFlag.Output.BadRequest.Body) {
                     self.body = body
                 }
             }
             /// Bad evaluation request
             ///
-            /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/{key}/post/responses/400`.
+            /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/{key}/post(evaluateFlag)/responses/400`.
             ///
             /// HTTP response code: `400 badRequest`.
-            case badRequest(Operations.PostOfrepV1EvaluateFlagsKey.Output.BadRequest)
+            case badRequest(Operations.EvaluateFlag.Output.BadRequest)
             /// The associated value of the enum case if `self` is `.badRequest`.
             ///
             /// - Throws: An error if `self` is not `.badRequest`.
             /// - SeeAlso: `.badRequest`.
-            package var badRequest: Operations.PostOfrepV1EvaluateFlagsKey.Output.BadRequest {
+            package var badRequest: Operations.EvaluateFlag.Output.BadRequest {
                 get throws {
                     switch self {
                     case let .badRequest(response):
@@ -1081,26 +1207,26 @@ package enum Operations {
                     }
                 }
                 /// Received HTTP response body
-                package var body: Operations.PostOfrepV1EvaluateFlagsKey.Output.NotFound.Body
+                package var body: Operations.EvaluateFlag.Output.NotFound.Body
                 /// Creates a new `NotFound`.
                 ///
                 /// - Parameters:
                 ///   - body: Received HTTP response body
-                package init(body: Operations.PostOfrepV1EvaluateFlagsKey.Output.NotFound.Body) {
+                package init(body: Operations.EvaluateFlag.Output.NotFound.Body) {
                     self.body = body
                 }
             }
             /// Flag not found
             ///
-            /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/{key}/post/responses/404`.
+            /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/{key}/post(evaluateFlag)/responses/404`.
             ///
             /// HTTP response code: `404 notFound`.
-            case notFound(Operations.PostOfrepV1EvaluateFlagsKey.Output.NotFound)
+            case notFound(Operations.EvaluateFlag.Output.NotFound)
             /// The associated value of the enum case if `self` is `.notFound`.
             ///
             /// - Throws: An error if `self` is not `.notFound`.
             /// - SeeAlso: `.notFound`.
-            package var notFound: Operations.PostOfrepV1EvaluateFlagsKey.Output.NotFound {
+            package var notFound: Operations.EvaluateFlag.Output.NotFound {
                 get throws {
                     switch self {
                     case let .notFound(response):
@@ -1119,13 +1245,13 @@ package enum Operations {
             }
             /// Unauthorized - You need credentials to access the API
             ///
-            /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/{key}/post/responses/401`.
+            /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/{key}/post(evaluateFlag)/responses/401`.
             ///
             /// HTTP response code: `401 unauthorized`.
-            case unauthorized(Operations.PostOfrepV1EvaluateFlagsKey.Output.Unauthorized)
+            case unauthorized(Operations.EvaluateFlag.Output.Unauthorized)
             /// Unauthorized - You need credentials to access the API
             ///
-            /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/{key}/post/responses/401`.
+            /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/{key}/post(evaluateFlag)/responses/401`.
             ///
             /// HTTP response code: `401 unauthorized`.
             package static var unauthorized: Self {
@@ -1135,7 +1261,7 @@ package enum Operations {
             ///
             /// - Throws: An error if `self` is not `.unauthorized`.
             /// - SeeAlso: `.unauthorized`.
-            package var unauthorized: Operations.PostOfrepV1EvaluateFlagsKey.Output.Unauthorized {
+            package var unauthorized: Operations.EvaluateFlag.Output.Unauthorized {
                 get throws {
                     switch self {
                     case let .unauthorized(response):
@@ -1154,13 +1280,13 @@ package enum Operations {
             }
             /// Forbidden - You are not authorized to access the API
             ///
-            /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/{key}/post/responses/403`.
+            /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/{key}/post(evaluateFlag)/responses/403`.
             ///
             /// HTTP response code: `403 forbidden`.
-            case forbidden(Operations.PostOfrepV1EvaluateFlagsKey.Output.Forbidden)
+            case forbidden(Operations.EvaluateFlag.Output.Forbidden)
             /// Forbidden - You are not authorized to access the API
             ///
-            /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/{key}/post/responses/403`.
+            /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/{key}/post(evaluateFlag)/responses/403`.
             ///
             /// HTTP response code: `403 forbidden`.
             package static var forbidden: Self {
@@ -1170,7 +1296,7 @@ package enum Operations {
             ///
             /// - Throws: An error if `self` is not `.forbidden`.
             /// - SeeAlso: `.forbidden`.
-            package var forbidden: Operations.PostOfrepV1EvaluateFlagsKey.Output.Forbidden {
+            package var forbidden: Operations.EvaluateFlag.Output.Forbidden {
                 get throws {
                     switch self {
                     case let .forbidden(response):
@@ -1199,26 +1325,26 @@ package enum Operations {
                     }
                 }
                 /// Received HTTP response headers
-                package var headers: Operations.PostOfrepV1EvaluateFlagsKey.Output.TooManyRequests.Headers
+                package var headers: Operations.EvaluateFlag.Output.TooManyRequests.Headers
                 /// Creates a new `TooManyRequests`.
                 ///
                 /// - Parameters:
                 ///   - headers: Received HTTP response headers
-                package init(headers: Operations.PostOfrepV1EvaluateFlagsKey.Output.TooManyRequests.Headers = .init()) {
+                package init(headers: Operations.EvaluateFlag.Output.TooManyRequests.Headers = .init()) {
                     self.headers = headers
                 }
             }
             /// Rate limit reached on the Flag Management System
             ///
-            /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/{key}/post/responses/429`.
+            /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/{key}/post(evaluateFlag)/responses/429`.
             ///
             /// HTTP response code: `429 tooManyRequests`.
-            case tooManyRequests(Operations.PostOfrepV1EvaluateFlagsKey.Output.TooManyRequests)
+            case tooManyRequests(Operations.EvaluateFlag.Output.TooManyRequests)
             /// The associated value of the enum case if `self` is `.tooManyRequests`.
             ///
             /// - Throws: An error if `self` is not `.tooManyRequests`.
             /// - SeeAlso: `.tooManyRequests`.
-            package var tooManyRequests: Operations.PostOfrepV1EvaluateFlagsKey.Output.TooManyRequests {
+            package var tooManyRequests: Operations.EvaluateFlag.Output.TooManyRequests {
                 get throws {
                     switch self {
                     case let .tooManyRequests(response):
@@ -1250,26 +1376,26 @@ package enum Operations {
                     }
                 }
                 /// Received HTTP response body
-                package var body: Operations.PostOfrepV1EvaluateFlagsKey.Output.InternalServerError.Body
+                package var body: Operations.EvaluateFlag.Output.InternalServerError.Body
                 /// Creates a new `InternalServerError`.
                 ///
                 /// - Parameters:
                 ///   - body: Received HTTP response body
-                package init(body: Operations.PostOfrepV1EvaluateFlagsKey.Output.InternalServerError.Body) {
+                package init(body: Operations.EvaluateFlag.Output.InternalServerError.Body) {
                     self.body = body
                 }
             }
             /// Internal server error
             ///
-            /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/{key}/post/responses/500`.
+            /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/{key}/post(evaluateFlag)/responses/500`.
             ///
             /// HTTP response code: `500 internalServerError`.
-            case internalServerError(Operations.PostOfrepV1EvaluateFlagsKey.Output.InternalServerError)
+            case internalServerError(Operations.EvaluateFlag.Output.InternalServerError)
             /// The associated value of the enum case if `self` is `.internalServerError`.
             ///
             /// - Throws: An error if `self` is not `.internalServerError`.
             /// - SeeAlso: `.internalServerError`.
-            package var internalServerError: Operations.PostOfrepV1EvaluateFlagsKey.Output.InternalServerError {
+            package var internalServerError: Operations.EvaluateFlag.Output.InternalServerError {
                 get throws {
                     switch self {
                     case let .internalServerError(response):
@@ -1320,9 +1446,9 @@ package enum Operations {
     ///
     ///
     /// - Remark: HTTP `POST /ofrep/v1/evaluate/flags`.
-    /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/post`.
-    package enum PostOfrepV1EvaluateFlags {
-        package static let id: Swift.String = "post/ofrep/v1/evaluate/flags"
+    /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/post(evaluateFlagsBulk)`.
+    package enum EvaluateFlagsBulk {
+        package static let id: Swift.String = "evaluateFlagsBulk"
         package struct Input: Sendable, Hashable {
             /// - Remark: Generated from `#/paths/ofrep/v1/evaluate/flags/POST/header`.
             package struct Headers: Sendable, Hashable {
@@ -1330,7 +1456,7 @@ package enum Operations {
                 ///
                 /// - Remark: Generated from `#/paths/ofrep/v1/evaluate/flags/POST/header/If-None-Match`.
                 package var ifNoneMatch: Swift.String?
-                package var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.PostOfrepV1EvaluateFlags.AcceptableContentType>]
+                package var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.EvaluateFlagsBulk.AcceptableContentType>]
                 /// Creates a new `Headers`.
                 ///
                 /// - Parameters:
@@ -1338,27 +1464,27 @@ package enum Operations {
                 ///   - accept:
                 package init(
                     ifNoneMatch: Swift.String? = nil,
-                    accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.PostOfrepV1EvaluateFlags.AcceptableContentType>] = .defaultValues()
+                    accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.EvaluateFlagsBulk.AcceptableContentType>] = .defaultValues()
                 ) {
                     self.ifNoneMatch = ifNoneMatch
                     self.accept = accept
                 }
             }
-            package var headers: Operations.PostOfrepV1EvaluateFlags.Input.Headers
+            package var headers: Operations.EvaluateFlagsBulk.Input.Headers
             /// - Remark: Generated from `#/paths/ofrep/v1/evaluate/flags/POST/requestBody`.
             @frozen package enum Body: Sendable, Hashable {
                 /// - Remark: Generated from `#/paths/ofrep/v1/evaluate/flags/POST/requestBody/content/application\/json`.
                 case json(Components.Schemas.BulkEvaluationRequest)
             }
-            package var body: Operations.PostOfrepV1EvaluateFlags.Input.Body?
+            package var body: Operations.EvaluateFlagsBulk.Input.Body?
             /// Creates a new `Input`.
             ///
             /// - Parameters:
             ///   - headers:
             ///   - body:
             package init(
-                headers: Operations.PostOfrepV1EvaluateFlags.Input.Headers = .init(),
-                body: Operations.PostOfrepV1EvaluateFlags.Input.Body? = nil
+                headers: Operations.EvaluateFlagsBulk.Input.Headers = .init(),
+                body: Operations.EvaluateFlagsBulk.Input.Body? = nil
             ) {
                 self.headers = headers
                 self.body = body
@@ -1381,7 +1507,7 @@ package enum Operations {
                     }
                 }
                 /// Received HTTP response headers
-                package var headers: Operations.PostOfrepV1EvaluateFlags.Output.Ok.Headers
+                package var headers: Operations.EvaluateFlagsBulk.Output.Ok.Headers
                 /// - Remark: Generated from `#/paths/ofrep/v1/evaluate/flags/POST/responses/200/content`.
                 @frozen package enum Body: Sendable, Hashable {
                     /// - Remark: Generated from `#/paths/ofrep/v1/evaluate/flags/POST/responses/200/content/application\/json`.
@@ -1400,15 +1526,15 @@ package enum Operations {
                     }
                 }
                 /// Received HTTP response body
-                package var body: Operations.PostOfrepV1EvaluateFlags.Output.Ok.Body
+                package var body: Operations.EvaluateFlagsBulk.Output.Ok.Body
                 /// Creates a new `Ok`.
                 ///
                 /// - Parameters:
                 ///   - headers: Received HTTP response headers
                 ///   - body: Received HTTP response body
                 package init(
-                    headers: Operations.PostOfrepV1EvaluateFlags.Output.Ok.Headers = .init(),
-                    body: Operations.PostOfrepV1EvaluateFlags.Output.Ok.Body
+                    headers: Operations.EvaluateFlagsBulk.Output.Ok.Headers = .init(),
+                    body: Operations.EvaluateFlagsBulk.Output.Ok.Body
                 ) {
                     self.headers = headers
                     self.body = body
@@ -1416,15 +1542,15 @@ package enum Operations {
             }
             /// OFREP successful evaluation response
             ///
-            /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/post/responses/200`.
+            /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/post(evaluateFlagsBulk)/responses/200`.
             ///
             /// HTTP response code: `200 ok`.
-            case ok(Operations.PostOfrepV1EvaluateFlags.Output.Ok)
+            case ok(Operations.EvaluateFlagsBulk.Output.Ok)
             /// The associated value of the enum case if `self` is `.ok`.
             ///
             /// - Throws: An error if `self` is not `.ok`.
             /// - SeeAlso: `.ok`.
-            package var ok: Operations.PostOfrepV1EvaluateFlags.Output.Ok {
+            package var ok: Operations.EvaluateFlagsBulk.Output.Ok {
                 get throws {
                     switch self {
                     case let .ok(response):
@@ -1443,13 +1569,13 @@ package enum Operations {
             }
             /// Bulk evaluation is not modified
             ///
-            /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/post/responses/304`.
+            /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/post(evaluateFlagsBulk)/responses/304`.
             ///
             /// HTTP response code: `304 notModified`.
-            case notModified(Operations.PostOfrepV1EvaluateFlags.Output.NotModified)
+            case notModified(Operations.EvaluateFlagsBulk.Output.NotModified)
             /// Bulk evaluation is not modified
             ///
-            /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/post/responses/304`.
+            /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/post(evaluateFlagsBulk)/responses/304`.
             ///
             /// HTTP response code: `304 notModified`.
             package static var notModified: Self {
@@ -1459,7 +1585,7 @@ package enum Operations {
             ///
             /// - Throws: An error if `self` is not `.notModified`.
             /// - SeeAlso: `.notModified`.
-            package var notModified: Operations.PostOfrepV1EvaluateFlags.Output.NotModified {
+            package var notModified: Operations.EvaluateFlagsBulk.Output.NotModified {
                 get throws {
                     switch self {
                     case let .notModified(response):
@@ -1491,26 +1617,26 @@ package enum Operations {
                     }
                 }
                 /// Received HTTP response body
-                package var body: Operations.PostOfrepV1EvaluateFlags.Output.BadRequest.Body
+                package var body: Operations.EvaluateFlagsBulk.Output.BadRequest.Body
                 /// Creates a new `BadRequest`.
                 ///
                 /// - Parameters:
                 ///   - body: Received HTTP response body
-                package init(body: Operations.PostOfrepV1EvaluateFlags.Output.BadRequest.Body) {
+                package init(body: Operations.EvaluateFlagsBulk.Output.BadRequest.Body) {
                     self.body = body
                 }
             }
             /// Bad evaluation request
             ///
-            /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/post/responses/400`.
+            /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/post(evaluateFlagsBulk)/responses/400`.
             ///
             /// HTTP response code: `400 badRequest`.
-            case badRequest(Operations.PostOfrepV1EvaluateFlags.Output.BadRequest)
+            case badRequest(Operations.EvaluateFlagsBulk.Output.BadRequest)
             /// The associated value of the enum case if `self` is `.badRequest`.
             ///
             /// - Throws: An error if `self` is not `.badRequest`.
             /// - SeeAlso: `.badRequest`.
-            package var badRequest: Operations.PostOfrepV1EvaluateFlags.Output.BadRequest {
+            package var badRequest: Operations.EvaluateFlagsBulk.Output.BadRequest {
                 get throws {
                     switch self {
                     case let .badRequest(response):
@@ -1529,13 +1655,13 @@ package enum Operations {
             }
             /// Unauthorized - You need credentials to access the API
             ///
-            /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/post/responses/401`.
+            /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/post(evaluateFlagsBulk)/responses/401`.
             ///
             /// HTTP response code: `401 unauthorized`.
-            case unauthorized(Operations.PostOfrepV1EvaluateFlags.Output.Unauthorized)
+            case unauthorized(Operations.EvaluateFlagsBulk.Output.Unauthorized)
             /// Unauthorized - You need credentials to access the API
             ///
-            /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/post/responses/401`.
+            /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/post(evaluateFlagsBulk)/responses/401`.
             ///
             /// HTTP response code: `401 unauthorized`.
             package static var unauthorized: Self {
@@ -1545,7 +1671,7 @@ package enum Operations {
             ///
             /// - Throws: An error if `self` is not `.unauthorized`.
             /// - SeeAlso: `.unauthorized`.
-            package var unauthorized: Operations.PostOfrepV1EvaluateFlags.Output.Unauthorized {
+            package var unauthorized: Operations.EvaluateFlagsBulk.Output.Unauthorized {
                 get throws {
                     switch self {
                     case let .unauthorized(response):
@@ -1564,13 +1690,13 @@ package enum Operations {
             }
             /// Forbidden - You are not authorized to access the API
             ///
-            /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/post/responses/403`.
+            /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/post(evaluateFlagsBulk)/responses/403`.
             ///
             /// HTTP response code: `403 forbidden`.
-            case forbidden(Operations.PostOfrepV1EvaluateFlags.Output.Forbidden)
+            case forbidden(Operations.EvaluateFlagsBulk.Output.Forbidden)
             /// Forbidden - You are not authorized to access the API
             ///
-            /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/post/responses/403`.
+            /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/post(evaluateFlagsBulk)/responses/403`.
             ///
             /// HTTP response code: `403 forbidden`.
             package static var forbidden: Self {
@@ -1580,7 +1706,7 @@ package enum Operations {
             ///
             /// - Throws: An error if `self` is not `.forbidden`.
             /// - SeeAlso: `.forbidden`.
-            package var forbidden: Operations.PostOfrepV1EvaluateFlags.Output.Forbidden {
+            package var forbidden: Operations.EvaluateFlagsBulk.Output.Forbidden {
                 get throws {
                     switch self {
                     case let .forbidden(response):
@@ -1609,26 +1735,26 @@ package enum Operations {
                     }
                 }
                 /// Received HTTP response headers
-                package var headers: Operations.PostOfrepV1EvaluateFlags.Output.TooManyRequests.Headers
+                package var headers: Operations.EvaluateFlagsBulk.Output.TooManyRequests.Headers
                 /// Creates a new `TooManyRequests`.
                 ///
                 /// - Parameters:
                 ///   - headers: Received HTTP response headers
-                package init(headers: Operations.PostOfrepV1EvaluateFlags.Output.TooManyRequests.Headers = .init()) {
+                package init(headers: Operations.EvaluateFlagsBulk.Output.TooManyRequests.Headers = .init()) {
                     self.headers = headers
                 }
             }
             /// Rate limit reached on the Flag Management System
             ///
-            /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/post/responses/429`.
+            /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/post(evaluateFlagsBulk)/responses/429`.
             ///
             /// HTTP response code: `429 tooManyRequests`.
-            case tooManyRequests(Operations.PostOfrepV1EvaluateFlags.Output.TooManyRequests)
+            case tooManyRequests(Operations.EvaluateFlagsBulk.Output.TooManyRequests)
             /// The associated value of the enum case if `self` is `.tooManyRequests`.
             ///
             /// - Throws: An error if `self` is not `.tooManyRequests`.
             /// - SeeAlso: `.tooManyRequests`.
-            package var tooManyRequests: Operations.PostOfrepV1EvaluateFlags.Output.TooManyRequests {
+            package var tooManyRequests: Operations.EvaluateFlagsBulk.Output.TooManyRequests {
                 get throws {
                     switch self {
                     case let .tooManyRequests(response):
@@ -1660,26 +1786,26 @@ package enum Operations {
                     }
                 }
                 /// Received HTTP response body
-                package var body: Operations.PostOfrepV1EvaluateFlags.Output.InternalServerError.Body
+                package var body: Operations.EvaluateFlagsBulk.Output.InternalServerError.Body
                 /// Creates a new `InternalServerError`.
                 ///
                 /// - Parameters:
                 ///   - body: Received HTTP response body
-                package init(body: Operations.PostOfrepV1EvaluateFlags.Output.InternalServerError.Body) {
+                package init(body: Operations.EvaluateFlagsBulk.Output.InternalServerError.Body) {
                     self.body = body
                 }
             }
             /// Internal server error
             ///
-            /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/post/responses/500`.
+            /// - Remark: Generated from `#/paths//ofrep/v1/evaluate/flags/post(evaluateFlagsBulk)/responses/500`.
             ///
             /// HTTP response code: `500 internalServerError`.
-            case internalServerError(Operations.PostOfrepV1EvaluateFlags.Output.InternalServerError)
+            case internalServerError(Operations.EvaluateFlagsBulk.Output.InternalServerError)
             /// The associated value of the enum case if `self` is `.internalServerError`.
             ///
             /// - Throws: An error if `self` is not `.internalServerError`.
             /// - SeeAlso: `.internalServerError`.
-            package var internalServerError: Operations.PostOfrepV1EvaluateFlags.Output.InternalServerError {
+            package var internalServerError: Operations.EvaluateFlagsBulk.Output.InternalServerError {
                 get throws {
                     switch self {
                     case let .internalServerError(response):
@@ -1730,9 +1856,9 @@ package enum Operations {
     ///
     ///
     /// - Remark: HTTP `GET /ofrep/v1/configuration`.
-    /// - Remark: Generated from `#/paths//ofrep/v1/configuration/get`.
-    package enum GetOfrepV1Configuration {
-        package static let id: Swift.String = "get/ofrep/v1/configuration"
+    /// - Remark: Generated from `#/paths//ofrep/v1/configuration/get(getConfiguration)`.
+    package enum GetConfiguration {
+        package static let id: Swift.String = "getConfiguration"
         package struct Input: Sendable, Hashable {
             /// - Remark: Generated from `#/paths/ofrep/v1/configuration/GET/header`.
             package struct Headers: Sendable, Hashable {
@@ -1740,7 +1866,7 @@ package enum Operations {
                 ///
                 /// - Remark: Generated from `#/paths/ofrep/v1/configuration/GET/header/If-None-Match`.
                 package var ifNoneMatch: Swift.String?
-                package var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.GetOfrepV1Configuration.AcceptableContentType>]
+                package var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.GetConfiguration.AcceptableContentType>]
                 /// Creates a new `Headers`.
                 ///
                 /// - Parameters:
@@ -1748,18 +1874,18 @@ package enum Operations {
                 ///   - accept:
                 package init(
                     ifNoneMatch: Swift.String? = nil,
-                    accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.GetOfrepV1Configuration.AcceptableContentType>] = .defaultValues()
+                    accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.GetConfiguration.AcceptableContentType>] = .defaultValues()
                 ) {
                     self.ifNoneMatch = ifNoneMatch
                     self.accept = accept
                 }
             }
-            package var headers: Operations.GetOfrepV1Configuration.Input.Headers
+            package var headers: Operations.GetConfiguration.Input.Headers
             /// Creates a new `Input`.
             ///
             /// - Parameters:
             ///   - headers:
-            package init(headers: Operations.GetOfrepV1Configuration.Input.Headers = .init()) {
+            package init(headers: Operations.GetConfiguration.Input.Headers = .init()) {
                 self.headers = headers
             }
         }
@@ -1780,7 +1906,7 @@ package enum Operations {
                     }
                 }
                 /// Received HTTP response headers
-                package var headers: Operations.GetOfrepV1Configuration.Output.Ok.Headers
+                package var headers: Operations.GetConfiguration.Output.Ok.Headers
                 /// - Remark: Generated from `#/paths/ofrep/v1/configuration/GET/responses/200/content`.
                 @frozen package enum Body: Sendable, Hashable {
                     /// - Remark: Generated from `#/paths/ofrep/v1/configuration/GET/responses/200/content/application\/json`.
@@ -1799,15 +1925,15 @@ package enum Operations {
                     }
                 }
                 /// Received HTTP response body
-                package var body: Operations.GetOfrepV1Configuration.Output.Ok.Body
+                package var body: Operations.GetConfiguration.Output.Ok.Body
                 /// Creates a new `Ok`.
                 ///
                 /// - Parameters:
                 ///   - headers: Received HTTP response headers
                 ///   - body: Received HTTP response body
                 package init(
-                    headers: Operations.GetOfrepV1Configuration.Output.Ok.Headers = .init(),
-                    body: Operations.GetOfrepV1Configuration.Output.Ok.Body
+                    headers: Operations.GetConfiguration.Output.Ok.Headers = .init(),
+                    body: Operations.GetConfiguration.Output.Ok.Body
                 ) {
                     self.headers = headers
                     self.body = body
@@ -1815,15 +1941,15 @@ package enum Operations {
             }
             /// OFREP metadata response
             ///
-            /// - Remark: Generated from `#/paths//ofrep/v1/configuration/get/responses/200`.
+            /// - Remark: Generated from `#/paths//ofrep/v1/configuration/get(getConfiguration)/responses/200`.
             ///
             /// HTTP response code: `200 ok`.
-            case ok(Operations.GetOfrepV1Configuration.Output.Ok)
+            case ok(Operations.GetConfiguration.Output.Ok)
             /// The associated value of the enum case if `self` is `.ok`.
             ///
             /// - Throws: An error if `self` is not `.ok`.
             /// - SeeAlso: `.ok`.
-            package var ok: Operations.GetOfrepV1Configuration.Output.Ok {
+            package var ok: Operations.GetConfiguration.Output.Ok {
                 get throws {
                     switch self {
                     case let .ok(response):
@@ -1842,13 +1968,13 @@ package enum Operations {
             }
             /// Flag Management System Metadata is not modified
             ///
-            /// - Remark: Generated from `#/paths//ofrep/v1/configuration/get/responses/304`.
+            /// - Remark: Generated from `#/paths//ofrep/v1/configuration/get(getConfiguration)/responses/304`.
             ///
             /// HTTP response code: `304 notModified`.
-            case notModified(Operations.GetOfrepV1Configuration.Output.NotModified)
+            case notModified(Operations.GetConfiguration.Output.NotModified)
             /// Flag Management System Metadata is not modified
             ///
-            /// - Remark: Generated from `#/paths//ofrep/v1/configuration/get/responses/304`.
+            /// - Remark: Generated from `#/paths//ofrep/v1/configuration/get(getConfiguration)/responses/304`.
             ///
             /// HTTP response code: `304 notModified`.
             package static var notModified: Self {
@@ -1858,7 +1984,7 @@ package enum Operations {
             ///
             /// - Throws: An error if `self` is not `.notModified`.
             /// - SeeAlso: `.notModified`.
-            package var notModified: Operations.GetOfrepV1Configuration.Output.NotModified {
+            package var notModified: Operations.GetConfiguration.Output.NotModified {
                 get throws {
                     switch self {
                     case let .notModified(response):
@@ -1877,13 +2003,13 @@ package enum Operations {
             }
             /// Unauthorized - You need credentials to access the API
             ///
-            /// - Remark: Generated from `#/paths//ofrep/v1/configuration/get/responses/401`.
+            /// - Remark: Generated from `#/paths//ofrep/v1/configuration/get(getConfiguration)/responses/401`.
             ///
             /// HTTP response code: `401 unauthorized`.
-            case unauthorized(Operations.GetOfrepV1Configuration.Output.Unauthorized)
+            case unauthorized(Operations.GetConfiguration.Output.Unauthorized)
             /// Unauthorized - You need credentials to access the API
             ///
-            /// - Remark: Generated from `#/paths//ofrep/v1/configuration/get/responses/401`.
+            /// - Remark: Generated from `#/paths//ofrep/v1/configuration/get(getConfiguration)/responses/401`.
             ///
             /// HTTP response code: `401 unauthorized`.
             package static var unauthorized: Self {
@@ -1893,7 +2019,7 @@ package enum Operations {
             ///
             /// - Throws: An error if `self` is not `.unauthorized`.
             /// - SeeAlso: `.unauthorized`.
-            package var unauthorized: Operations.GetOfrepV1Configuration.Output.Unauthorized {
+            package var unauthorized: Operations.GetConfiguration.Output.Unauthorized {
                 get throws {
                     switch self {
                     case let .unauthorized(response):
@@ -1912,13 +2038,13 @@ package enum Operations {
             }
             /// Forbidden - You are not authorized to access the API
             ///
-            /// - Remark: Generated from `#/paths//ofrep/v1/configuration/get/responses/403`.
+            /// - Remark: Generated from `#/paths//ofrep/v1/configuration/get(getConfiguration)/responses/403`.
             ///
             /// HTTP response code: `403 forbidden`.
-            case forbidden(Operations.GetOfrepV1Configuration.Output.Forbidden)
+            case forbidden(Operations.GetConfiguration.Output.Forbidden)
             /// Forbidden - You are not authorized to access the API
             ///
-            /// - Remark: Generated from `#/paths//ofrep/v1/configuration/get/responses/403`.
+            /// - Remark: Generated from `#/paths//ofrep/v1/configuration/get(getConfiguration)/responses/403`.
             ///
             /// HTTP response code: `403 forbidden`.
             package static var forbidden: Self {
@@ -1928,7 +2054,7 @@ package enum Operations {
             ///
             /// - Throws: An error if `self` is not `.forbidden`.
             /// - SeeAlso: `.forbidden`.
-            package var forbidden: Operations.GetOfrepV1Configuration.Output.Forbidden {
+            package var forbidden: Operations.GetConfiguration.Output.Forbidden {
                 get throws {
                     switch self {
                     case let .forbidden(response):
@@ -1960,26 +2086,26 @@ package enum Operations {
                     }
                 }
                 /// Received HTTP response body
-                package var body: Operations.GetOfrepV1Configuration.Output.InternalServerError.Body
+                package var body: Operations.GetConfiguration.Output.InternalServerError.Body
                 /// Creates a new `InternalServerError`.
                 ///
                 /// - Parameters:
                 ///   - body: Received HTTP response body
-                package init(body: Operations.GetOfrepV1Configuration.Output.InternalServerError.Body) {
+                package init(body: Operations.GetConfiguration.Output.InternalServerError.Body) {
                     self.body = body
                 }
             }
             /// Internal server error
             ///
-            /// - Remark: Generated from `#/paths//ofrep/v1/configuration/get/responses/500`.
+            /// - Remark: Generated from `#/paths//ofrep/v1/configuration/get(getConfiguration)/responses/500`.
             ///
             /// HTTP response code: `500 internalServerError`.
-            case internalServerError(Operations.GetOfrepV1Configuration.Output.InternalServerError)
+            case internalServerError(Operations.GetConfiguration.Output.InternalServerError)
             /// The associated value of the enum case if `self` is `.internalServerError`.
             ///
             /// - Throws: An error if `self` is not `.internalServerError`.
             /// - SeeAlso: `.internalServerError`.
-            package var internalServerError: Operations.GetOfrepV1Configuration.Output.InternalServerError {
+            package var internalServerError: Operations.GetConfiguration.Output.InternalServerError {
                 get throws {
                     switch self {
                     case let .internalServerError(response):
