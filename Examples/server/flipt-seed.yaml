@@ -1,0 +1,23 @@
+version: "1.4"
+namespace:
+  key: default
+  name: Default
+  description: Default namespace
+flags:
+- key: experimental-feed-algorithm
+  name: experimental-feed-algorithm
+  type: BOOLEAN_FLAG_TYPE
+  enabled: false
+  rollouts:
+  - segment:
+      key: internal-testers
+      value: true
+segments:
+- key: internal-testers
+  name: internal-testers
+  constraints:
+  - type: STRING_COMPARISON_TYPE
+    property: targetingKey
+    operator: isoneof
+    value: '["42"]'
+  match_type: ALL_MATCH_TYPE
