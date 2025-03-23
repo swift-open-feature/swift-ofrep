@@ -88,8 +88,227 @@ struct OFREPIntegrationTests {
                     reason: .error,
                     variant: "a"
                 )
-                let flag = "static-a-b"
+                let flag = "static-a"
                 await #expect(provider.resolution(of: flag, defaultValue: defaultValue, context: nil) == resolution)
+            }
+        }
+    }
+
+    @Suite("String Flag Resolution")
+    struct StringResolutionTests {
+        @Test("Static", arguments: [("static-a", "a", "value-a"), ("static-b", "b", "value-b")])
+        func staticBool(flag: String, variant: String, expectedValue: String) async throws {
+            let provider = OFREPProvider(serverURL: URL(string: "http://localhost:8016")!)
+
+            try await withOFREPProvider(provider) {
+                let resolution = OpenFeatureResolution(
+                    value: expectedValue,
+                    error: nil,
+                    reason: .static,
+                    variant: variant,
+                    flagMetadata: [:]
+                )
+                await #expect(provider.resolution(of: flag, defaultValue: "default", context: nil) == resolution)
+            }
+        }
+
+        @Test("Targeting Match")
+        func targetingMatch() async throws {
+            let provider = OFREPProvider(serverURL: URL(string: "http://localhost:8016")!)
+
+            try await withOFREPProvider(provider) {
+                let resolution = OpenFeatureResolution(
+                    value: "value-b",
+                    error: nil,
+                    reason: .targetingMatch,
+                    variant: "b",
+                    flagMetadata: [:]
+                )
+                let flag = "targeting-b"
+                let context = OpenFeatureEvaluationContext(targetingKey: "swift")
+                await #expect(provider.resolution(of: flag, defaultValue: "default", context: context) == resolution)
+            }
+        }
+
+        @Test("No Targeting Match")
+        func noTargetingMatch() async throws {
+            let provider = OFREPProvider(serverURL: URL(string: "http://localhost:8016")!)
+
+            try await withOFREPProvider(provider) {
+                let resolution = OpenFeatureResolution(
+                    value: "value-a",
+                    error: nil,
+                    reason: .default,
+                    variant: "a",
+                    flagMetadata: [:]
+                )
+                let flag = "targeting-b"
+                await #expect(provider.resolution(of: flag, defaultValue: "default", context: nil) == resolution)
+            }
+        }
+
+        @Test("Type mismatch")
+        func typeMismatch() async throws {
+            let provider = OFREPProvider(serverURL: URL(string: "http://localhost:8016")!)
+
+            try await withOFREPProvider(provider) {
+                let resolution = OpenFeatureResolution(
+                    value: "default",
+                    error: OpenFeatureResolutionError(
+                        code: .typeMismatch,
+                        message: #"Expected flag value of type "String" but received "Bool"."#
+                    ),
+                    reason: .error,
+                    variant: "on"
+                )
+                let flag = "static-on"
+                await #expect(provider.resolution(of: flag, defaultValue: "default", context: nil) == resolution)
+            }
+        }
+    }
+
+    @Suite("Int Flag Resolution")
+    struct IntResolutionTests {
+        @Test("Static", arguments: [("static-negative-42", "a", -42), ("static-positive-42", "b", 42)])
+        func staticBool(flag: String, variant: String, expectedValue: Int) async throws {
+            let provider = OFREPProvider(serverURL: URL(string: "http://localhost:8016")!)
+
+            try await withOFREPProvider(provider) {
+                let resolution = OpenFeatureResolution(
+                    value: expectedValue,
+                    error: nil,
+                    reason: .static,
+                    variant: variant,
+                    flagMetadata: [:]
+                )
+                await #expect(provider.resolution(of: flag, defaultValue: 0, context: nil) == resolution)
+            }
+        }
+
+        @Test("Targeting Match")
+        func targetingMatch() async throws {
+            let provider = OFREPProvider(serverURL: URL(string: "http://localhost:8016")!)
+
+            try await withOFREPProvider(provider) {
+                let resolution = OpenFeatureResolution(
+                    value: 42,
+                    error: nil,
+                    reason: .targetingMatch,
+                    variant: "b",
+                    flagMetadata: [:]
+                )
+                let flag = "targeting-42"
+                let context = OpenFeatureEvaluationContext(targetingKey: "swift")
+                await #expect(provider.resolution(of: flag, defaultValue: 0, context: context) == resolution)
+            }
+        }
+
+        @Test("No Targeting Match")
+        func noTargetingMatch() async throws {
+            let provider = OFREPProvider(serverURL: URL(string: "http://localhost:8016")!)
+
+            try await withOFREPProvider(provider) {
+                let resolution = OpenFeatureResolution(
+                    value: -42,
+                    error: nil,
+                    reason: .default,
+                    variant: "a",
+                    flagMetadata: [:]
+                )
+                let flag = "targeting-42"
+                await #expect(provider.resolution(of: flag, defaultValue: 0, context: nil) == resolution)
+            }
+        }
+
+        @Test("Type mismatch")
+        func typeMismatch() async throws {
+            let provider = OFREPProvider(serverURL: URL(string: "http://localhost:8016")!)
+
+            try await withOFREPProvider(provider) {
+                let resolution = OpenFeatureResolution(
+                    value: 42,
+                    error: OpenFeatureResolutionError(
+                        code: .typeMismatch,
+                        message: #"Expected flag value of type "Int" but received "String"."#
+                    ),
+                    reason: .error,
+                    variant: "a"
+                )
+                let flag = "static-a"
+                await #expect(provider.resolution(of: flag, defaultValue: 42, context: nil) == resolution)
+            }
+        }
+    }
+
+    @Suite("Double Flag Resolution")
+    struct DoubleResolutionTests {
+        @Test("Static", arguments: [("static-negative-42.123", "a", -42.123), ("static-positive-42.123", "b", 42.123)])
+        func staticBool(flag: String, variant: String, expectedValue: Double) async throws {
+            let provider = OFREPProvider(serverURL: URL(string: "http://localhost:8016")!)
+
+            try await withOFREPProvider(provider) {
+                let resolution = OpenFeatureResolution(
+                    value: expectedValue,
+                    error: nil,
+                    reason: .static,
+                    variant: variant,
+                    flagMetadata: [:]
+                )
+                await #expect(provider.resolution(of: flag, defaultValue: 0.0, context: nil) == resolution)
+            }
+        }
+
+        @Test("Targeting Match")
+        func targetingMatch() async throws {
+            let provider = OFREPProvider(serverURL: URL(string: "http://localhost:8016")!)
+
+            try await withOFREPProvider(provider) {
+                let resolution = OpenFeatureResolution(
+                    value: 42.123,
+                    error: nil,
+                    reason: .targetingMatch,
+                    variant: "b",
+                    flagMetadata: [:]
+                )
+                let flag = "targeting-42.123"
+                let context = OpenFeatureEvaluationContext(targetingKey: "swift")
+                await #expect(provider.resolution(of: flag, defaultValue: 0.0, context: context) == resolution)
+            }
+        }
+
+        @Test("No Targeting Match")
+        func noTargetingMatch() async throws {
+            let provider = OFREPProvider(serverURL: URL(string: "http://localhost:8016")!)
+
+            try await withOFREPProvider(provider) {
+                let resolution = OpenFeatureResolution(
+                    value: -42.123,
+                    error: nil,
+                    reason: .default,
+                    variant: "a",
+                    flagMetadata: [:]
+                )
+                let flag = "targeting-42.123"
+                await #expect(provider.resolution(of: flag, defaultValue: 0.0, context: nil) == resolution)
+            }
+        }
+
+        @Test("Type mismatch")
+        func typeMismatch() async throws {
+            let provider = OFREPProvider(serverURL: URL(string: "http://localhost:8016")!)
+
+            try await withOFREPProvider(provider) {
+                let resolution = OpenFeatureResolution(
+                    value: 42.123,
+                    error: OpenFeatureResolutionError(
+                        code: .typeMismatch,
+                        message: #"Expected flag value of type "Double" but received "String"."#
+                    ),
+                    reason: .error,
+                    variant: "a"
+                )
+                let flag = "static-a"
+                await #expect(provider.resolution(of: flag, defaultValue: 42.123, context: nil) == resolution)
             }
         }
     }

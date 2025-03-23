@@ -109,30 +109,123 @@ final class OFREPProviderTests {
         try #expect(JSONDecoder().decode(Components.Schemas.EvaluationRequest.self, from: bodyBytes) == payload)
     }
 
-    @Test("Returns successful server evaluation", arguments: [true, false])
-    func returnsSuccessfulServerEvaluation(value: Bool) async throws {
-        let transport = ClosureOFREPClientTransport {
-            (
-                HTTPResponse(status: .ok),
-                HTTPBody(
-                    """
-                    {
-                        "value": \(value),
-                        "reason": "STATIC",
-                        "variant": "a"
-                    }
-                    """
+    @Suite("Bool Evaluation")
+    struct BoolEvaluationTests {
+        @Test("Returns successful server evaluation", arguments: [true, false])
+        func success(value: Bool) async throws {
+            let transport = ClosureOFREPClientTransport {
+                (
+                    HTTPResponse(status: .ok),
+                    HTTPBody(
+                        """
+                        {
+                            "value": \(value),
+                            "reason": "STATIC",
+                            "variant": "a"
+                        }
+                        """
+                    )
                 )
-            )
+            }
+            let provider = OFREPProvider(transport: transport)
+
+            let resolution = await provider.resolution(of: "test-flag", defaultValue: !value, context: nil)
+
+            #expect(resolution.value == value)
+            #expect(resolution.error == nil)
+            #expect(resolution.reason == .static)
+            #expect(resolution.variant == "a")
         }
-        let provider = OFREPProvider(transport: transport)
+    }
 
-        let resolution = await provider.resolution(of: "test-flag", defaultValue: !value, context: nil)
+    @Suite("String Evaluation")
+    struct StringEvaluationTests {
+        @Test("Returns successful server evaluation", arguments: ["Hello", ""])
+        func success(value: String) async throws {
+            let transport = ClosureOFREPClientTransport {
+                (
+                    HTTPResponse(status: .ok),
+                    HTTPBody(
+                        """
+                        {
+                            "value": "\(value)",
+                            "reason": "STATIC",
+                            "variant": "a"
+                        }
+                        """
+                    )
+                )
+            }
+            let provider = OFREPProvider(transport: transport)
 
-        #expect(resolution.value == value)
-        #expect(resolution.error == nil)
-        #expect(resolution.reason == .static)
-        #expect(resolution.variant == "a")
+            let resolution = await provider.resolution(of: "test-flag", defaultValue: "default", context: nil)
+
+            #expect(resolution.value == value)
+            #expect(resolution.error == nil)
+            #expect(resolution.reason == .static)
+            #expect(resolution.variant == "a")
+        }
+    }
+
+    @Suite("Int Evaluation")
+    struct IntEvaluationTests {
+        @Test("Returns successful server evaluation", arguments: [Int.min, 0, Int.max])
+        func success(value: Int) async throws {
+            let transport = ClosureOFREPClientTransport {
+                (
+                    HTTPResponse(status: .ok),
+                    HTTPBody(
+                        """
+                        {
+                            "value": \(value),
+                            "reason": "STATIC",
+                            "variant": "a"
+                        }
+                        """
+                    )
+                )
+            }
+            let provider = OFREPProvider(transport: transport)
+
+            let resolution = await provider.resolution(of: "test-flag", defaultValue: 42, context: nil)
+
+            #expect(resolution.value == value)
+            #expect(resolution.error == nil)
+            #expect(resolution.reason == .static)
+            #expect(resolution.variant == "a")
+        }
+    }
+
+    @Suite("Double Evaluation")
+    struct DoubleEvaluationTests {
+        @Test(
+            "Returns successful server evaluation",
+            arguments: [-Double.greatestFiniteMagnitude, 42.123, Double.greatestFiniteMagnitude]
+        )
+        func success(value: Double) async throws {
+            let transport = ClosureOFREPClientTransport {
+                (
+                    HTTPResponse(status: .ok),
+                    HTTPBody(
+                        """
+                        {
+                            "value": \(value),
+                            "reason": "STATIC",
+                            "variant": "a"
+                        }
+                        """
+                    )
+                )
+            }
+            let provider = OFREPProvider(transport: transport)
+
+            let resolution = await provider.resolution(of: "test-flag", defaultValue: 42.0, context: nil)
+
+            #expect(resolution.value == value)
+            #expect(resolution.error == nil)
+            #expect(resolution.reason == .static)
+            #expect(resolution.variant == "a")
+        }
     }
 
     @Test("Returns default value when transport fails", arguments: [true, false])

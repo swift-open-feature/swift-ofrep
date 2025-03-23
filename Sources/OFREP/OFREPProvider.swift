@@ -34,6 +34,54 @@ public struct OFREPProvider<Transport: OFREPClientTransport>: OpenFeatureProvide
         defaultValue: Bool,
         context: OpenFeatureEvaluationContext?
     ) async -> OpenFeatureResolution<Bool> {
+        await resolution(of: flag, defaultValue: defaultValue, context: context) { output in
+            OpenFeatureResolution(output, defaultValue: defaultValue)
+        }
+    }
+
+    public func resolution(
+        of flag: String,
+        defaultValue: String,
+        context: OpenFeatureEvaluationContext?
+    ) async -> OpenFeatureResolution<String> {
+        await resolution(of: flag, defaultValue: defaultValue, context: context) { output in
+            OpenFeatureResolution(output, defaultValue: defaultValue)
+        }
+    }
+
+    public func resolution(
+        of flag: String,
+        defaultValue: Int,
+        context: OpenFeature.OpenFeatureEvaluationContext?
+    ) async -> OpenFeature.OpenFeatureResolution<Int> {
+        await resolution(of: flag, defaultValue: defaultValue, context: context) { output in
+            OpenFeatureResolution(output, defaultValue: defaultValue)
+        }
+    }
+
+    public func resolution(
+        of flag: String,
+        defaultValue: Double,
+        context: OpenFeature.OpenFeatureEvaluationContext?
+    ) async -> OpenFeature.OpenFeatureResolution<Double> {
+        await resolution(of: flag, defaultValue: defaultValue, context: context) { output in
+            OpenFeatureResolution(output, defaultValue: defaultValue)
+        }
+    }
+
+    public func run() async throws {
+        try await gracefulShutdown()
+        logger.debug("Shutting down.")
+        try await transport.shutdownGracefully()
+        logger.debug("Shut down.")
+    }
+
+    private func resolution<Value: OpenFeatureValue>(
+        of flag: String,
+        defaultValue: Value,
+        context: OpenFeatureEvaluationContext?,
+        transformServerResponse: (Operations.EvaluateFlag.Output) -> OpenFeatureResolution<Value>
+    ) async -> OpenFeatureResolution<Value> {
         let request: Components.Schemas.EvaluationRequest
         do {
             request = try Components.Schemas.EvaluationRequest(flag: flag, defaultValue: defaultValue, context: context)
@@ -48,7 +96,7 @@ public struct OFREPProvider<Transport: OFREPClientTransport>: OpenFeatureProvide
                     headers: .init(accept: [.init(contentType: .json)]),
                     body: .json(request)
                 )
-                return OpenFeatureResolution(response, defaultValue: defaultValue)
+                return transformServerResponse(response)
             } catch let error as ClientError {
                 throw error.underlyingError
             }
@@ -59,12 +107,5 @@ public struct OFREPProvider<Transport: OFREPClientTransport>: OpenFeatureProvide
                 reason: .error
             )
         }
-    }
-
-    public func run() async throws {
-        try await gracefulShutdown()
-        logger.debug("Shutting down.")
-        try await transport.shutdownGracefully()
-        logger.debug("Shut down.")
     }
 }
