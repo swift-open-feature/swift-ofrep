@@ -38,13 +38,116 @@
         ]
       }
     },
-    "static-a-b": {
+    "static-a": {
       "state": "ENABLED",
       "variants": {
-        "a": "a",
-        "b": "b"
+        "a": "value-a",
+        "b": "value-b"
       },
       "defaultVariant": "a"
+    },
+    "static-b": {
+      "state": "ENABLED",
+      "variants": {
+        "a": "value-a",
+        "b": "value-b"
+      },
+      "defaultVariant": "b"
+    },
+    "targeting-b": {
+      "state": "ENABLED",
+      "variants": {
+        "a": "value-a",
+        "b": "value-b"
+      },
+      "defaultVariant": "a",
+      "targeting": {
+        "if": [
+          {
+            "===": [
+              {
+                "var": "targetingKey"
+              },
+              "swift"
+            ]
+          },
+          "b"
+        ]
+      }
+    },
+    "static-negative-42": {
+      "state": "ENABLED",
+      "variants": {
+        "a": -42,
+        "b": 42
+      },
+      "defaultVariant": "a"
+    },
+    "static-positive-42": {
+      "state": "ENABLED",
+      "variants": {
+        "a": -42,
+        "b": 42
+      },
+      "defaultVariant": "b"
+    },
+    "targeting-42": {
+      "state": "ENABLED",
+      "variants": {
+        "a": -42,
+        "b": 42
+      },
+      "defaultVariant": "a",
+      "targeting": {
+        "if": [
+          {
+            "===": [
+              {
+                "var": "targetingKey"
+              },
+              "swift"
+            ]
+          },
+          "b"
+        ]
+      }
+    },
+    "static-negative-42.123": {
+      "state": "ENABLED",
+      "variants": {
+        "a": -42.123,
+        "b": 42.123
+      },
+      "defaultVariant": "a"
+    },
+    "static-positive-42.123": {
+      "state": "ENABLED",
+      "variants": {
+        "a": -42.123,
+        "b": 42.123
+      },
+      "defaultVariant": "b"
+    },
+    "targeting-42.123": {
+      "state": "ENABLED",
+      "variants": {
+        "a": -42.123,
+        "b": 42.123
+      },
+      "defaultVariant": "a",
+      "targeting": {
+        "if": [
+          {
+            "===": [
+              {
+                "var": "targetingKey"
+              },
+              "swift"
+            ]
+          },
+          "b"
+        ]
+      }
     }
   }
 }
