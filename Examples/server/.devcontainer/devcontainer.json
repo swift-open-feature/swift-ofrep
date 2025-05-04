@@ -1,0 +1,52 @@
+{
+  "name": "Server",
+  "workspaceFolder": "/workspace/server",
+  "dockerComposeFile": [
+    "../docker-compose.yaml",
+    "docker-compose.yaml"
+  ],
+  "service": "server",
+  "runServices": [
+    "flipt",
+    "jaeger",
+    "otel-collector",
+    "server"
+  ],
+  "shutdownAction": "stopCompose",
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": "false",
+      "username": "server",
+      "upgradePackages": "false"
+    },
+    "ghcr.io/devcontainers/features/git:1": {
+      "version": "os-provided",
+      "ppa": "false"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "lldb.library": "/usr/lib/liblldb.so",
+        "swift.autoGenerateLaunchConfigurations": false
+      },
+      "extensions": [
+        "swiftlang.swift-vscode"
+      ]
+    }
+  },
+  "forwardPorts": [8080, 8081, 16686],
+  "portsAttributes": {
+    "8080": {
+      "label": "API",
+      "onAutoForward": "notify"
+    },
+    "8081": {
+      "label": "Flipt"
+    },
+    "16686": {
+      "label": "Jaeger"
+    }
+  },
+  "remoteUser": "server"
+}

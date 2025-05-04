@@ -1,0 +1,48 @@
+name: swift-ofrep-example-server
+services:
+  # ==/ Feature Flagging Systems \==
+
+  flipt:
+    image: flipt/flipt:v1.54.2
+    command: ["./flipt", "--force-migrate"]
+    depends_on:
+      flipt-seed:
+        condition: service_completed_successfully
+    volumes:
+      - flipt_data:/var/opt/flipt
+    ports:
+      - 8081:8080 # OFREP & Flipt UI
+    environment:
+      FLIPT_LOG_LEVEL: debug
+      FLIPT_TRACING_ENABLED: true
+      FLIPT_TRACING_EXPORTER: otlp
+      FLIPT_TRACING_OTLP_ENDPOINT: otel-collector:4317
+      FLIPT_METRICS_ENABLED: false
+      FLIPT_META_TELEMETRY_ENABLED: false
+  flipt-seed:
+    image: flipt/flipt:v1.54.2
+    command: ["./flipt", "import", "--skip-existing" , "flipt.yaml"]
+    volumes:
+      - ./flipt-seed.yaml:/flipt.yaml
+      - flipt_data:/var/opt/flipt
+    environment:
+      FLIPT_LOG_LEVEL: debug
+      FLIPT_META_TELEMETRY_ENABLED: false
+
+  # ==/ Observability \==
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    ports:
+      - "4317:4317" # OTLP/gRPC
+
+  jaeger:
+    image: jaegertracing/jaeger:2.3.0
+    ports:
+      - "16686:16686" # Jaeger UI
+
+volumes:
+  flipt_data:
